@@ -1,0 +1,9 @@
+import type { User } from "../types/types";
+
+type Response = {
+  success: boolean;
+  message: string;
+  code: number;
+};
+
+export type InitResponse = Response & { body: { user: User | null; suggested: User[] } };
