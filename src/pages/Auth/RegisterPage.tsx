@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { useMustLoggedOut } from "../../utils/customhooks";
 import type { RegisterErrorObject } from "../../types/types";
@@ -14,13 +14,45 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [fullname, setFullName] = useState("");
   const [errors, setErrors] = useState<RegisterErrorObject>({});
-  const [finished, setFinished] = useState("");
 
-  const { isPending, error, mutate } = useRegister();
+  const { isPending, error, mutate, data } = useRegister();
   const navigate = useNavigate();
   useMustLoggedOut();
 
-  function handleSubmit() {}
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    setErrors({});
+    const e: RegisterErrorObject = {};
+    if (username.length < 4) {
+      e.username = "Username must be 4 charcters long";
+    }
+    if (password.length < 6) {
+      e.password = "Password must be at least 6 characters long";
+    }
+    if (confirm !== password) {
+      e.confirm = "Passwords do not match";
+    }
+    if (!/.+@.+\..+/.test(email)) {
+      e.email = "Please enter a valid email address";
+    }
+    if (fullname.length < 2) {
+      e.fullname = "Fullname must be at least 2 characters long";
+    }
+
+    if (Object.keys(e).length > 0) {
+      setErrors(e);
+      return;
+    }
+
+    mutate(
+      { username, password, email, fullname },
+      {
+        onSuccess() {
+          setTimeout(() => navigate("/auth/login"), 10000);
+        },
+      }
+    );
+  }
 
   return (
     <Box my={7} px={1}>
@@ -91,7 +123,7 @@ export default function RegisterPage() {
             fullWidth
             size="small"
             value={fullname}
-            onChange={(e) => setFullname(e.target.value)}
+            onChange={(e) => setFullName(e.target.value)}
             error={!!errors.fullname}
             helperText={errors.fullname}
           />
