@@ -19,3 +19,8 @@ export type RegisterObject = {
   fullname: string;
   email: string;
 };
+
+export type ActivationObject = {
+  username?: string;
+  activationCode?: string;
+};
