@@ -24,3 +24,14 @@ export type ActivationObject = {
   username?: string;
   activationCode?: string;
 };
+
+export type LoginErrorObject = {
+  username?: string;
+  password?: string;
+};
+
+export type LoginObject = {
+  username?: string;
+  password?: string;
+  remmember?: boolean;
+};

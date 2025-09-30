@@ -9,6 +9,7 @@ export default function ActivationPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // When the component mounts, we don’t have access to useParams yet, so we use the approach below.
     if (username && activationCode) {
       mutate(
         { username, activationCode },

@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { ActivationObject, RegisterObject } from "../types/types";
+import type { ActivationObject, LoginObject, RegisterObject } from "../types/types";
 import { useMutation } from "@tanstack/react-query";
 
 export function useRegister() {
@@ -11,5 +11,11 @@ export function useRegister() {
 export function useActivation() {
   return useMutation({
     mutationFn: (data: ActivationObject) => axios.post("auth/activate", data),
+  });
+}
+
+export function useLogin() {
+  return useMutation({
+    mutationFn: (data: LoginObject) => axios.post("auth/login", data),
   });
 }
