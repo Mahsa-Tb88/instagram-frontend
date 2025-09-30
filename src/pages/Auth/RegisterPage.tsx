@@ -2,10 +2,11 @@ import React, { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { useMustLoggedOut } from "../../utils/customhooks";
 import type { RegisterErrorObject } from "../../types/types";
-import { Alert, Box, Button, TextField, Typography } from "@mui/material";
+import { Alert, AlertTitle, Box, Button, TextField, Typography } from "@mui/material";
 import { Stack } from "@mui/material";
 import { useRegister } from "../../http/mutation";
 import instagram from "../../assets/images/instagram.png";
+import { Divider } from "@mui/material";
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("");
@@ -54,6 +55,17 @@ export default function RegisterPage() {
     );
   }
 
+  if (data?.data?.success) {
+    return (
+      <Box my={7} px={2}>
+        <Alert sx={{ maxWidth: 460, mx: "auto", pb: 6 }} variant="filled" icon={false}>
+          <AlertTitle fontSize={24}>Your account created successfully</AlertTitle>
+          <Divider sx={{ my: 1 }} />
+          <Typography fontSize={18}>Please check your inbox, for activate your account</Typography>
+        </Alert>
+      </Box>
+    );
+  }
   return (
     <Box my={7} px={1}>
       <Stack
