@@ -1,6 +1,8 @@
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "react-router";
+
+import "./utils/globalconstants";
 import router from "./router/router";
 import { ToastContainer } from "react-toastify";
 

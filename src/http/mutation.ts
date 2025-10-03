@@ -19,3 +19,9 @@ export function useLogin() {
     mutationFn: (data: LoginObject) => axios.post("auth/login", data),
   });
 }
+
+export function useLogout() {
+    return useMutation({
+        mutationFn: () => axios.post("/auth/logout"),
+    });
+}

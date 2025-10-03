@@ -9,6 +9,10 @@ declare module "@mui/material" {
   interface PaletteOptions {
     light?: PaletteColorOptions;
   }
+
+  interface ListItemButtonOwnProps {
+    to?: string;
+  }
 }
 
 export {};
