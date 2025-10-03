@@ -13,6 +13,10 @@ declare module "@mui/material" {
   interface ListItemButtonOwnProps {
     to?: string;
   }
+
+  interface IconButtonOwnProps {
+    to?: string;
+  }
 }
 
 export {};

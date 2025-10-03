@@ -63,7 +63,7 @@ export default function ConfirmDialog() {
         <Button type="submit" sx={{ width: 90 }} onClick={retrunTrue}>
           {confirmText}
         </Button>
-        <Button onClick={returnFalse} color="secondary" variant="outlined" sx={{ width: 90 }}>
+        <Button onClick={returnFalse} color="warning" variant="outlined" sx={{ width: 90 }}>
           {cancelText}
         </Button>
       </DialogActions>

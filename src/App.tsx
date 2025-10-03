@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import theme from "./theme/theme";
 import { Outlet } from "react-router";
 import Initializer from "./layouts/Initializer/Initializer";
+import ConfirmDialog from "./components/Dialogs/ConfirmDialog";
 
 function App() {
   const isInitialized = useAppStore((state) => state.initialized);
@@ -20,6 +21,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {isInitialized ? <Outlet /> : <Initializer />}
+      <ConfirmDialog />
     </ThemeProvider>
   );
 }

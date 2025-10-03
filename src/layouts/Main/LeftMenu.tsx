@@ -12,7 +12,9 @@ export default function LeftMenu() {
 
   async function handleLogout() {
     const answer = await showConfirmDialog(
-      <p style={{ fontSize: 24, margin: "10px 0" }}>Are you sure to logout?</p>,
+      <p style={{ fontSize: 20, margin: "40px 0", textAlign: "center" }}>
+        Are you sure to logout?
+      </p>,
       "Yes",
       "No"
     );
