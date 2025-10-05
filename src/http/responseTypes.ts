@@ -1,4 +1,4 @@
-import type { User } from "../types/types";
+import type { Post, User } from "../types/types";
 
 type Response = {
   success: boolean;

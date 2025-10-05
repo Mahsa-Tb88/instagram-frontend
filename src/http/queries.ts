@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { InitResponse } from "./responseTypes";
+import type { FeedResponse, InitResponse } from "./responseTypes";
 
 axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.withCredentials = true;
@@ -25,3 +25,20 @@ export function useInitialize() {
   });
 }
 
+export function useFeedPosts(limit: number) {
+  return useInfiniteQuery({
+    queryKey: ["feedPosts", limit],
+    initialPageParam: 1,
+    queryFn: ({ pageParam }: { pageParam: number }) =>
+      axios.get<FeedResponse>("/posts/user/feed", { params: { page: pageParam, limit } }),
+    getNextPageParam(lastPage, pages, lastPageParam) {
+      const totalPosts = lastPage.data.body.count;
+      const totalPages = Math.ceil(totalPosts / limit);
+      if (totalPages > pages.length) {
+        return lastPageParam + 1;
+      } else {
+        return;
+      }
+    },
+  });
+}
