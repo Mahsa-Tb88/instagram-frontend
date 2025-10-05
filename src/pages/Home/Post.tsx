@@ -15,6 +15,7 @@ import { Link } from "react-router";
 import parse from "html-react-parser";
 import { useUserStore } from "../../store/store";
 import { MdComment, MdFavorite } from "react-icons/md";
+import { useLikePost, useUnlikePost } from "../../http/mutation";
 
 type PostProps = { post: Post };
 export default function Post({ post }: PostProps) {
@@ -23,11 +24,38 @@ export default function Post({ post }: PostProps) {
   const userId = useUserStore((state) => state._id);
   const liked = post.likes.includes(userId);
   const [likeChanged, setLikeChanged] = useState(false);
+
+  const unlikeMutation = useUnlikePost();
+  const likeMutation = useLikePost();
+
   function handleFollowUnfollow() {}
   const dateOfPost = new Date(post.createdAt);
 
-  function handleLikeUnlike() {}
-  function showViewPostDialog() {}
+  function handleLikeUnlike() {
+    if (liked != likeChanged) {
+      console.log("diffrent");
+      unlikeMutation.mutate(post._id, {
+        onError() {
+          setLikeChanged(likeChanged);
+        },
+        onSuccess() {
+          setLikeChanged(!likeChanged);
+        },
+      });
+    } else {
+      console.log("equal");
+
+      likeMutation.mutate(post._id, {
+        onError() {
+          setLikeChanged(likeChanged);
+        },
+        onSuccess() {
+          setLikeChanged(!likeChanged);
+        },
+      });
+    }
+    setLikeChanged(!likeChanged);
+  }
 
   return (
     <Card>
@@ -68,7 +96,7 @@ export default function Post({ post }: PostProps) {
           {liked != likeChanged ? <MdFavorite color="red" /> : <MdFavorite />}
         </IconButton>
         <Typography>{post.likes.length + (!likeChanged ? 0 : liked ? -1 : 1)}</Typography>
-        <IconButton onClick={() => showViewPostDialog(post._id)}>
+        <IconButton>
           <MdComment />
         </IconButton>
         <Typography>{post.comments.length}</Typography>

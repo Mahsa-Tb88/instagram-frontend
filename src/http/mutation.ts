@@ -21,7 +21,18 @@ export function useLogin() {
 }
 
 export function useLogout() {
-    return useMutation({
-        mutationFn: () => axios.post("/auth/logout"),
-    });
+  return useMutation({
+    mutationFn: () => axios.post("/auth/logout"),
+  });
+}
+
+export function useUnlikePost() {
+  return useMutation({
+    mutationFn: (id: string) => axios.put("/posts/" + id + "/unlike", null, { timeout: 3000 }),
+  });
+}
+export function useLikePost() {
+  return useMutation({
+    mutationFn: (id: string) => axios.put("/posts/" + id + "/like", null, { timeout: 3000 }),
+  });
 }
