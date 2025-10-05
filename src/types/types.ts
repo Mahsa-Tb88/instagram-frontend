@@ -35,3 +35,20 @@ export type LoginObject = {
   password?: string;
   remmember?: boolean;
 };
+
+export type Comment = {
+  _id: string;
+  text: string;
+  user: User;
+};
+
+export type Post = {
+  _id: string;
+  caption: string;
+  image: string;
+  user: User;
+  likes: string[];
+  comments: Comment[];
+  createdAt: string;
+  updatedAt: string;
+};

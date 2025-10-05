@@ -24,3 +24,4 @@ export function useInitialize() {
     queryFn: () => axios.get<InitResponse>("/misc/init"),
   });
 }
+

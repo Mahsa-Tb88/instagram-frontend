@@ -7,3 +7,4 @@ type Response = {
 };
 
 export type InitResponse = Response & { body: { user: User | null; suggested: User[] } };
+export type FeedResponse = Response & { body: { count: number; posts: Post[] } };
