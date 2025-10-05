@@ -15,7 +15,7 @@ import { Link } from "react-router";
 import parse from "html-react-parser";
 import { useUserStore } from "../../store/store";
 import { MdComment, MdFavorite } from "react-icons/md";
-import { useLikePost, useUnlikePost } from "../../http/mutation";
+import { useFollowUser, useLikePost, useUnfollowUser, useUnlikePost } from "../../http/mutation";
 
 type PostProps = { post: Post };
 export default function Post({ post }: PostProps) {
@@ -27,13 +27,29 @@ export default function Post({ post }: PostProps) {
 
   const unlikeMutation = useUnlikePost();
   const likeMutation = useLikePost();
+  const followMutation = useFollowUser();
+  const unfollowMutation = useUnfollowUser();
 
-  function handleFollowUnfollow() {}
+  function handleFollowUnfollow() {
+    if (followChanged) {
+      followMutation.mutate(post.user._id, {
+        onError() {
+          setFollowChanged(followChanged);
+        },
+      });
+    } else {
+      unfollowMutation.mutate(post.user._id, {
+        onError() {
+          setFollowChanged(followChanged);
+        },
+      });
+    }
+    setFollowChanged(!followChanged);
+  }
   const dateOfPost = new Date(post.createdAt);
 
   function handleLikeUnlike() {
     if (liked != likeChanged) {
-      console.log("diffrent");
       unlikeMutation.mutate(post._id, {
         onError() {
           setLikeChanged(likeChanged);
@@ -43,8 +59,6 @@ export default function Post({ post }: PostProps) {
         },
       });
     } else {
-      console.log("equal");
-
       likeMutation.mutate(post._id, {
         onError() {
           setLikeChanged(likeChanged);

@@ -36,3 +36,16 @@ export function useLikePost() {
     mutationFn: (id: string) => axios.put("/posts/" + id + "/like", null, { timeout: 3000 }),
   });
 }
+export function useFollowUser() {
+  return useMutation({
+    mutationFn: (targetId: string) =>
+      axios.put("/users/" + targetId + "/follow", null, { timeout: 3000 }),
+  });
+}
+
+export function useUnfollowUser() {
+  return useMutation({
+    mutationFn: (targetId: string) =>
+      axios.put("/users/" + targetId + "/unfollow", null, { timeout: 3000 }),
+  });
+}
