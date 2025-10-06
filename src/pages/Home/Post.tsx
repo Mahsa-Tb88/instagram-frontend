@@ -72,7 +72,7 @@ export default function Post({ post }: PostProps) {
   }
 
   return (
-    <Card>
+    <Card sx={{ maxWidth: 500, mb: 5, mx: "auto", boxShadow: 0, border: "1px solid #ccc" }}>
       <CardHeader
         avatar={
           <Avatar

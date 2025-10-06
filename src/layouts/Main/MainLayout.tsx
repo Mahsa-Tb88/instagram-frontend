@@ -11,7 +11,7 @@ export default function MainLayout() {
   useMustLoggedIn();
 
   return (
-    <Box>
+    <Box display={"flex"}>
       {isMobile ? <BottomMenu /> : <LeftMenu />}
       <Outlet />
     </Box>
