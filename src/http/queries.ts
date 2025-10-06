@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { FeedResponse, InitResponse } from "./responseTypes";
+import type { FeedResponse, GetPostResponse, InitResponse } from "./responseTypes";
 
 axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.withCredentials = true;
@@ -40,5 +40,13 @@ export function useFeedPosts(limit: number) {
         return;
       }
     },
+  });
+}
+
+export function useGetPost(postId: string) {
+  return useQuery({
+    queryKey: ["post", postId],
+    queryFn: () => axios.get<GetPostResponse>("/posts" + postId),
+    enabled: !!postId,
   });
 }
