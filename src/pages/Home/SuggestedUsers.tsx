@@ -13,6 +13,14 @@ export default function SuggestedUsers() {
   const followMutation = useFollowUser();
   const logoutMutation = useLogout();
 
+  function handleFollow(id: string) {
+    followMutation.mutate(id, {
+      onSuccess() {
+        setSuggestedUsers(suggestedUsers.filter((s) => s._id !== id));
+      },
+    });
+  }
+
   async function handleLogout() {
     const answer = await showConfirmDialog(
       <p style={{ fontSize: 24, margin: "10px 0" }}>Are you sure to logout?</p>,
