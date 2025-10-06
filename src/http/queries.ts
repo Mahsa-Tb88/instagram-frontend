@@ -46,7 +46,7 @@ export function useFeedPosts(limit: number) {
 export function useGetPost(postId: string) {
   return useQuery({
     queryKey: ["post", postId],
-    queryFn: () => axios.get<GetPostResponse>("/posts" + postId),
+    queryFn: () => axios.get<GetPostResponse>("/posts/" + postId),
     enabled: !!postId,
   });
 }

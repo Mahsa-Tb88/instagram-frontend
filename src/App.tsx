@@ -7,6 +7,7 @@ import theme from "./theme/theme";
 import { Outlet } from "react-router";
 import Initializer from "./layouts/Initializer/Initializer";
 import ConfirmDialog from "./components/Dialogs/ConfirmDialog";
+import ViewPostDialog from "./components/Dialogs/ViewPostDialog/ViewPostDialog";
 
 function App() {
   const isInitialized = useAppStore((state) => state.initialized);
@@ -22,6 +23,7 @@ function App() {
       <CssBaseline />
       {isInitialized ? <Outlet /> : <Initializer />}
       <ConfirmDialog />
+      <ViewPostDialog />
     </ThemeProvider>
   );
 }

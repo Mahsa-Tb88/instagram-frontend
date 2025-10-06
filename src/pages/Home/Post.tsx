@@ -16,7 +16,7 @@ import parse from "html-react-parser";
 import { useUserStore } from "../../store/store";
 import { MdComment, MdFavorite } from "react-icons/md";
 import { useFollowUser, useLikePost, useUnfollowUser, useUnlikePost } from "../../http/mutation";
-import ViewPostDialog from "../../components/Dialogs/ViewPostDialog/ViewPostDialog";
+import { showViewPostDialog } from "../../components/Dialogs/ViewPostDialog/ViewPostDialog";
 
 type PostProps = { post: Post };
 export default function Post({ post }: PostProps) {

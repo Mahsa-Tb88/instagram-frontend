@@ -7,6 +7,7 @@ import PostContent from "./PostContent";
 import { DialogContent } from "@mui/material";
 import ViewPostSkeleton from "./ViewPostSkeleton";
 import { useAppStore } from "../../../store/store";
+import type { Post } from "../../../types/types";
 
 let showViewPostDialog: (s: string) => void;
 export { showViewPostDialog };
@@ -24,6 +25,12 @@ export default function ViewPostDialog() {
     };
   }, []);
 
+  function hideDialog() {
+    setOpen(false);
+    setPostId("");
+  }
+  console.log("dataaa", data);
+  const post = (data?.data?.body ?? {}) as Post;
   return (
     <MyDialog open={open} fullWidth maxWidth="md" fullScreen={isMobile} setOpen={setOpen}>
       <DialogTitle>View Post</DialogTitle>
@@ -42,7 +49,7 @@ export default function ViewPostDialog() {
             <LoadingError message={error.message} handleAction={refetch} />
           </Box>
         ) : (
-          postId && <PostContent />
+          postId && <PostContent post={post} hideDialog={hideDialog} />
         )}
       </DialogContent>
     </MyDialog>
