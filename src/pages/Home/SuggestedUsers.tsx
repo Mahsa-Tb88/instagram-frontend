@@ -4,6 +4,7 @@ import { useUserStore } from "../../store/store";
 import { Link } from "react-router";
 import { Typography } from "@mui/material";
 import { useFollowUser, useLogout } from "../../http/mutation";
+import { showConfirmDialog } from "../../components/Dialogs/ConfirmDialog";
 
 export default function SuggestedUsers() {
   const { username, fullname, profilePicture, suggestedUsers, setSuggestedUsers, logout } =
@@ -11,6 +12,21 @@ export default function SuggestedUsers() {
 
   const followMutation = useFollowUser();
   const logoutMutation = useLogout();
+
+  async function handleLogout() {
+    const answer = await showConfirmDialog(
+      <p style={{ fontSize: 24, margin: "10px 0" }}>Are you sure to logout?</p>,
+      "Yes",
+      "No"
+    );
+    if (answer) {
+      logoutMutation.mutate(undefined, {
+        onSuccess() {
+          logout();
+        },
+      });
+    }
+  }
   return (
     <Stack height="100%">
       <Stack direction="row" spacing={2} alignItems="center" useFlexGap>
