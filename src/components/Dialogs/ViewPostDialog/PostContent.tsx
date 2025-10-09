@@ -1,9 +1,10 @@
-import { Avatar, Container, Grid, Stack, Typography } from "@mui/material";
+import { Avatar, Container, Grid, IconButton, Stack, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
 import { useUserStore } from "../../../store/store";
 import { Comment, type Post } from "../../../types/types";
 import { useInsertComment } from "../../../http/mutation";
 import { useNavigate } from "react-router";
+import { MdDelete, MdEdit } from "react-icons/md";
 
 type PostContentProps = {
   post: Post;
@@ -17,6 +18,8 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
   const commentMutation = useInsertComment();
   const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  const allComments = [...post.comments, ...newComments];
 
   function handleGotoProfile() {}
   return (
@@ -52,6 +55,47 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
             <Typography sx={{ mt: 1, fontSize: 12, textAlign: "justify", mr: 4 }}>
               {post.caption}
             </Typography>
+          </Stack>
+          <Stack mt={4}>
+            <Typography component={"h6"} variant="h6" fontWeight={600} mb={1}>
+              {" "}
+              Comments
+            </Typography>
+            <Stack sx={{ bgcolor: "light.main", p: 1, borderRadius: 1, mr: 3 }}>
+              {allComments.map((c) => (
+                <Stack mb={1} sx={{ bgcolor: "light.dark", p: 1, borderRadius: 1 }}>
+                  <Stack direction={"row"} gap={1} alignItems={"center"}>
+                    <Avatar
+                      src={SERVER_URL + c.user.profilePicture}
+                      sx={{ width: "30px", height: "30px" }}
+                    />
+                    <Stack>
+                      <Typography fontWeight={600} fontSize={14}>
+                        {c.user.username}
+                      </Typography>
+                      <Typography color="text.secondary" fontSize={10}>
+                        {c._id.slice(0, 10)}
+                      </Typography>
+                    </Stack>
+
+                    <Stack ml="auto" direction="row" justifyContent="end" alignItems="center">
+                      <IconButton sx={{ m: 0, p: "5px" }} color="error">
+                        <MdDelete size={14} />
+                      </IconButton>
+                      <IconButton sx={{ m: 0, p: "5px" }} color="info">
+                        <MdEdit size={14} />
+                      </IconButton>
+                    </Stack>
+                  </Stack>
+                  <Typography
+                    sx={{ whiteSpace: "pre-line", overflowWrap: "anywhere", lineHeight: 1.8 }}
+                    fontSize={14}
+                  >
+                    {c.text}
+                  </Typography>
+                </Stack>
+              ))}
+            </Stack>
           </Stack>
         </Grid>
       </Grid>
