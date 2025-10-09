@@ -1,5 +1,5 @@
-import { Box, DialogTitle, Stack } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Box, DialogTitle } from "@mui/material";
+import { useEffect, useState } from "react";
 import MyDialog from "../../Customized/MyDialog";
 import { useGetPost } from "../../../http/queries";
 import LoadingError from "../../LoadingError";
@@ -35,7 +35,7 @@ export default function ViewPostDialog() {
     <MyDialog open={open} fullWidth maxWidth="md" fullScreen={isMobile} setOpen={setOpen}>
       <DialogTitle>View Post</DialogTitle>
       <DialogContent sx={{ p: 0, m: 0 }}>
-        {isFetching ? (
+        {!isFetching ? (
           <ViewPostSkeleton />
         ) : error ? (
           <Box
