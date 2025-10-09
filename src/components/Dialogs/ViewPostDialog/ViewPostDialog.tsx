@@ -35,7 +35,7 @@ export default function ViewPostDialog() {
     <MyDialog open={open} fullWidth maxWidth="md" fullScreen={isMobile} setOpen={setOpen}>
       <DialogTitle>View Post</DialogTitle>
       <DialogContent sx={{ p: 0, m: 0 }}>
-        {!isFetching ? (
+        {isFetching ? (
           <ViewPostSkeleton />
         ) : error ? (
           <Box

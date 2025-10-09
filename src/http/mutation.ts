@@ -49,3 +49,10 @@ export function useUnfollowUser() {
       axios.put("/users/" + targetId + "/unfollow", null, { timeout: 3000 }),
   });
 }
+
+export function useInsertComment() {
+  return useMutation({
+    mutationFn: (data: { id: string; text: string }) =>
+      axios.post("/posts/" + data.id + "/comment", data, { timeout: 3000 }),
+  });
+}
