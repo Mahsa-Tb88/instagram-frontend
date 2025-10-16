@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ThemeProvider } from "@emotion/react";
-import { CssBaseline, useMediaQuery } from "@mui/material";
+
+import { CssBaseline, useMediaQuery, ThemeProvider } from "@mui/material";
 import { useAppStore } from "./store/store";
 import { useEffect } from "react";
 import theme from "./theme/theme";

@@ -1,10 +1,19 @@
-import { Avatar, Container, Grid, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Container,
+  Grid,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useRef, useState } from "react";
 import { useUserStore } from "../../../store/store";
 import { Comment, type Post } from "../../../types/types";
 import { useInsertComment } from "../../../http/mutation";
 import { useNavigate } from "react-router";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdDelete, MdEdit, MdSend } from "react-icons/md";
 
 type PostContentProps = {
   post: Post;
@@ -22,6 +31,7 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
   const allComments = [...post.comments, ...newComments];
 
   function handleGotoProfile() {}
+  function handleComment() {}
   return (
     <Container disableGutters>
       <Grid container spacing={3} my={5}>
@@ -37,7 +47,7 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
           />
         </Grid>
         <Grid size={{ xs: 12, md: 5 }}>
-          <Stack>
+          <Stack sx={{ mr: 3 }}>
             <Stack
               onClick={() => handleGotoProfile(post.user.username)}
               direction={"row"}
@@ -52,16 +62,15 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
                 <Typography color="text.secondary">{post.updatedAt.slice(0, 10)}</Typography>
               </Stack>
             </Stack>
-            <Typography sx={{ mt: 1, fontSize: 12, textAlign: "justify", mr: 4 }}>
+            <Typography sx={{ mt: 1, fontSize: 12, textAlign: "justify" }}>
               {post.caption}
             </Typography>
           </Stack>
-          <Stack mt={4}>
+          <Stack mt={4} sx={{ mr: 3 }}>
             <Typography component={"h6"} variant="h6" fontWeight={600} mb={1}>
-              {" "}
               Comments
             </Typography>
-            <Stack sx={{ bgcolor: "light.main", p: 1, borderRadius: 1, mr: 3 }}>
+            <Stack sx={{ bgcolor: "light.main", p: 1, borderRadius: 1, mb: 3 }}>
               {allComments.map((c) => (
                 <Stack mb={1} sx={{ bgcolor: "light.dark", p: 1, borderRadius: 1 }}>
                   <Stack direction={"row"} gap={1} alignItems={"center"}>
@@ -95,6 +104,28 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
                   </Typography>
                 </Stack>
               ))}
+              <div ref={ref} />
+            </Stack>
+            <Stack mt={"auto"} flexDirection={"row"} alignItems={"center"} gap={1}>
+              <TextField
+                variant="standard"
+                size="small"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                disabled={commentMutation.isPending}
+                fullWidth
+                placeholder="Leave a comment"
+                // minRows={1}
+                // maxRows={2}
+                multiline
+              />
+              <Button
+                size="small"
+                onClick={handleComment}
+                disabled={text.length < 2 || commentMutation.isPending}
+              >
+                <MdSend size={24} />
+              </Button>
             </Stack>
           </Stack>
         </Grid>
