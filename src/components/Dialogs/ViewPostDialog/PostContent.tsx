@@ -51,7 +51,7 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
         user: { _id: "", username, fullname: "", profilePicture },
       },
     ]);
-
+    setTimeout(() => ref.current!.scrollIntoView({ behavior: "smooth" }), 50);
     commentMutation.mutate(
       { text, id: post._id },
       {
@@ -59,6 +59,7 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
           setText("");
         },
         onError(e) {
+          console.log("e", e);
           setNewComments((c) => c.slice(0, c.length - 1));
           toast.error(e.message);
         },
