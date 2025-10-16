@@ -30,7 +30,12 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
 
   const allComments = [...post.comments, ...newComments];
 
-  function handleGotoProfile() {}
+  function handleGotoProfile(username: string) {
+    hideDialog();
+    setTimeout(() => {
+      navigate("/user/" + username);
+    }, 50);
+  }
   function handleComment() {}
   return (
     <Container disableGutters>
@@ -48,15 +53,13 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
         </Grid>
         <Grid size={{ xs: 12, md: 5 }}>
           <Stack sx={{ mr: 3 }}>
-            <Stack
-              onClick={() => handleGotoProfile(post.user.username)}
-              direction={"row"}
-              alignItems={"center"}
-              gap={1}
-            >
-              <Avatar src={SERVER_URL + post.user.profilePicture} />
+            <Stack direction={"row"} alignItems={"center"} gap={1}>
+              <Avatar
+                src={SERVER_URL + post.user.profilePicture}
+                onClick={() => handleGotoProfile(post.user.username)}
+              />
               <Stack>
-                <Typography fontWeight={600}>
+                <Typography fontWeight={600} onClick={() => handleGotoProfile(post.user.username)}>
                   {post.user.username.slice(0, 1).toUpperCase() + post.user.username.slice(1)}
                 </Typography>
                 <Typography color="text.secondary">{post.updatedAt.slice(0, 10)}</Typography>
@@ -76,11 +79,17 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
                   <Stack direction={"row"} gap={1} alignItems={"center"}>
                     <Avatar
                       src={SERVER_URL + c.user.profilePicture}
-                      sx={{ width: "30px", height: "30px" }}
+                      sx={{ width: "30px", height: "30px", cursor: "pointer" }}
+                      onClick={() => handleGotoProfile(c.user.username)}
                     />
                     <Stack>
-                      <Typography fontWeight={600} fontSize={14}>
-                        {c.user.username}
+                      <Typography
+                        fontWeight={600}
+                        fontSize={14}
+                        onClick={() => handleGotoProfile(c.user.username)}
+                        sx={{ cursor: "pointer" }}
+                      >
+                        {c.user.username.slice(0, 1) + c.user.username.slice(1)}
                       </Typography>
                       <Typography color="text.secondary" fontSize={10}>
                         {c._id.slice(0, 10)}
