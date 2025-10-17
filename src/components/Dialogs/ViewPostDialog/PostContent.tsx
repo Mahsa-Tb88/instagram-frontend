@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useUserStore } from "../../../store/store";
 import type { Comment, Post } from "../../../types/types";
 import { useInsertComment } from "../../../http/mutation";
@@ -37,6 +37,7 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
       navigate("/user/" + username);
     }, 50);
   }
+
   function handleComment() {
     if (text.length > 300) {
       toast.error("Comment must not exceed 300 characters");
@@ -59,13 +60,14 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
           setText("");
         },
         onError(e) {
-          console.log("e", e);
           setNewComments((c) => c.slice(0, c.length - 1));
           toast.error(e.message);
         },
       }
     );
   }
+
+  
   return (
     <Container disableGutters>
       <Grid container spacing={3} my={5}>

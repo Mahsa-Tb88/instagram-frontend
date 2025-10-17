@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, DialogTitle } from "@mui/material";
 import { useEffect, useState } from "react";
 import MyDialog from "../../Customized/MyDialog";
@@ -8,6 +9,7 @@ import { DialogContent } from "@mui/material";
 import ViewPostSkeleton from "./ViewPostSkeleton";
 import { useAppStore } from "../../../store/store";
 import type { Post } from "../../../types/types";
+import { useQueryClient } from "@tanstack/react-query";
 
 let showViewPostDialog: (s: string) => void;
 export { showViewPostDialog };
@@ -18,6 +20,8 @@ export default function ViewPostDialog() {
   const { data, error, isFetching, refetch } = useGetPost(postId);
   const isMobile = useAppStore((state) => state.isMobile);
 
+  const client = useQueryClient();
+
   useEffect(() => {
     showViewPostDialog = (postId: string) => {
       setOpen(true);
@@ -25,11 +29,18 @@ export default function ViewPostDialog() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!open && postId) {
+      client.invalidateQueries({ queryKey: ["post", postId] });
+      // client.invalidateQueries({ queryKey: ["feedPosts", 10] });
+    }
+  }, [open]);
+
   function hideDialog() {
     setOpen(false);
+    client.invalidateQueries({ queryKey: ["post", postId] });
     setPostId("");
   }
-  console.log("dataaa", data);
   const post = (data?.data?.body ?? {}) as Post;
   return (
     <MyDialog open={open} fullWidth maxWidth="md" fullScreen={isMobile} setOpen={setOpen}>
