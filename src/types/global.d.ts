@@ -3,6 +3,10 @@ import type { PaletteColorOptions } from "@mui/material";
 declare global {
   var SERVER_URL: string;
   var API_BASE_URL: string;
+
+  interface Error {
+    status?: number;
+  }
 }
 
 declare module "@mui/material" {

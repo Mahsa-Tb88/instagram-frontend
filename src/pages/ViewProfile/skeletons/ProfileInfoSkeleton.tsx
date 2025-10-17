@@ -2,7 +2,7 @@ import { Box, Grid, Skeleton, Stack } from "@mui/material";
 
 export default function ProfileInfoSkeleton() {
   return (
-    <Grid container mb={3} spacing={6}>
+    <Grid container mb={3} columnSpacing={{ xs: 2, sm: 3, lg: 4 }}>
       <Grid size={3}>
         <Skeleton
           variant="circular"
@@ -17,13 +17,7 @@ export default function ProfileInfoSkeleton() {
           <Skeleton variant="rectangular" width={"20%"} animation="wave" />
           <Skeleton variant="rectangular" width={"20%"} height={40} animation="wave" />
         </Stack>
-        <Stack
-          my={4}
-          flexDirection={"row"}
-          gap={2}
-          alignItems={"center"}
-          
-        >
+        <Stack my={4} flexDirection={"row"} gap={2} alignItems={"center"}>
           <Skeleton variant="rectangular" width={"20%"} height={40} animation="wave" />
           <Skeleton variant="rectangular" width={"20%"} height={40} animation="wave" />
           <Skeleton variant="rectangular" width={"20%"} height={40} animation="wave" />
