@@ -52,3 +52,15 @@ export type Post = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type Profile = {
+  _id: string;
+  username: string;
+  fullname: string;
+  email: string;
+  profilePicture: string;
+  followers: string;
+  following: string;
+  bio: string;
+  postsCount: number;
+};

@@ -1,6 +1,11 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { FeedResponse, GetPostResponse, InitResponse } from "./responseTypes";
+import {
+  GetProfileResponse,
+  type FeedResponse,
+  type GetPostResponse,
+  type InitResponse,
+} from "./responseTypes";
 
 axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.withCredentials = true;
@@ -48,5 +53,12 @@ export function useGetPost(postId: string) {
     queryKey: ["post", postId],
     queryFn: () => axios.get<GetPostResponse>("/posts/" + postId),
     enabled: !!postId,
+  });
+}
+
+export function useGetProfile(username: string) {
+  return useQuery({
+    queryKey: ["profile", username],
+    queryFn: () => axios.get<GetProfileResponse>("/users/" + username),
   });
 }

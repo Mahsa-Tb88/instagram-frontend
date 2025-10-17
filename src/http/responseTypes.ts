@@ -1,4 +1,4 @@
-import type { Post, User } from "../types/types";
+import type { Post, Profile, User } from "../types/types";
 
 type Response = {
   success: boolean;
@@ -9,3 +9,4 @@ type Response = {
 export type InitResponse = Response & { body: { user: User | null; suggested: User[] } };
 export type FeedResponse = Response & { body: { count: number; posts: Post[] } };
 export type GetPostResponse = Response & { body: Post };
+export type GetProfileResponse = Response & { body: Profile };
