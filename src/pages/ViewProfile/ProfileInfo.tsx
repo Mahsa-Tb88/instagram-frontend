@@ -28,7 +28,14 @@ export default function ProfileInfo() {
       },
     });
   }
-  function handleUnfollow() {}
+  function handleUnfollow() {
+    setFollowChanged(!followChanged);
+    unFollowMutation.mutate(user._id, {
+      onError() {
+        setFollowChanged(followChanged);
+      },
+    });
+  }
 
   const user = (data?.data?.body ?? {}) as Profile;
 
