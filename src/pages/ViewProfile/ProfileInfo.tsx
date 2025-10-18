@@ -61,6 +61,17 @@ export default function ProfileInfo() {
                 <Button>{user.following.includes(currentUserId) ? "Follow Back" : "Follow"}</Button>
               )}
             </Stack>
+            <Stack flexDirection={"row"} alignItems={"center"} gap={2} my={4}>
+              <Typography bgcolor="#f2f2f2" borderRadius={1} py={1} px={2}>
+                <b>{user.postsCount}Post</b>
+              </Typography>
+              <Button sx={{ py: 1, px: 2 }} disableElevation color="light">
+                <b>{user.followers.length}&nbsp;</b>Followers
+              </Button>
+              <Button sx={{ py: 1, px: 2 }} disableElevation color="light">
+                <b>{user.following.length}&nbsp;</b>Following
+              </Button>
+            </Stack>
           </Grid>
         </Grid>
       )}

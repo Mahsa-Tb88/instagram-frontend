@@ -21,6 +21,9 @@ declare module "@mui/material" {
   interface IconButtonOwnProps {
     to?: string;
   }
+  interface ButtonPropsColorOverrides {
+    light?: true;
+  }
 }
 
 export {};
