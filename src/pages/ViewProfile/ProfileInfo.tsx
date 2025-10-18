@@ -8,6 +8,7 @@ import type { Profile } from "../../types/types";
 import noImage from "../../assets/images/no-image.jpg";
 import { useState } from "react";
 import { useUserStore } from "../../store/store";
+import { useFollowUser, useUnfollowUser } from "../../http/mutation";
 
 export default function ProfileInfo() {
   const { username } = useParams<{ username: string }>();
@@ -15,8 +16,19 @@ export default function ProfileInfo() {
   const currentUserId = useUserStore((state) => state._id);
   const currentUsername = useUserStore((state) => state.username);
   const [followChanged, setFollowChanged] = useState(false);
+  const followMutaion = useFollowUser();
+  const unFollowMutation = useUnfollowUser();
 
   const navigate = useNavigate();
+  function handleFollow() {
+    setFollowChanged(!followChanged);
+    followMutaion.mutate(user._id, {
+      onError() {
+        setFollowChanged(followChanged);
+      },
+    });
+  }
+  function handleUnfollow() {}
 
   const user = (data?.data?.body ?? {}) as Profile;
 
@@ -32,7 +44,7 @@ export default function ProfileInfo() {
           actionIcon={error.status === 404 ? <MdHome /> : <MdRefresh />}
         />
       ) : (
-        <Grid container columnSpacing={{ xs: 2, sm: 3, lg: 4 }}>
+        <Grid container columnSpacing={{ xs: 2, sm: 3, lg: 4 }} mb={3}>
           <Grid size={3}>
             <Avatar
               src={user.profilePicture ? SERVER_URL + user.profilePicture : noImage}
@@ -40,25 +52,27 @@ export default function ProfileInfo() {
                 width: 1,
                 aspectRatio: 1,
                 height: "auto",
-                mb: 3,
+                mb: 1,
                 border: "1px solid #ccc",
               }}
             />
             <Typography textAlign="center" fontWeight="bold" fontSize={{ xs: 18, sm: 22, md: 24 }}>
-              {user.username}
+              {user.username.slice(0, 1).toUpperCase() + user.username.slice(1)}
             </Typography>
           </Grid>
           <Grid size={9}>
-            <Stack flexDirection={"row"} alignItems={"center"}>
+            <Stack flexDirection={"row"} alignItems={"center"} gap={2}>
               <Typography>{user.fullname}</Typography>
               {currentUsername == username ? (
                 <Button sx={{ ml: 4 }} endIcon={<MdEdit />}>
                   Edit profile
                 </Button>
               ) : user.following.includes(currentUserId) !== followChanged ? (
-                <Button>Unfollow</Button>
+                <Button onClick={handleUnfollow}>Unfollow</Button>
               ) : (
-                <Button>{user.following.includes(currentUserId) ? "Follow Back" : "Follow"}</Button>
+                <Button onClick={handleFollow}>
+                  {user.following.includes(currentUserId) ? "Follow Back" : "Follow"}
+                </Button>
               )}
             </Stack>
             <Stack flexDirection={"row"} alignItems={"center"} gap={2} my={4}>
