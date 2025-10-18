@@ -71,18 +71,45 @@ export default function ProfileInfo() {
             <Stack flexDirection={"row"} alignItems={"center"} gap={2}>
               <Typography>{user.fullname}</Typography>
               {currentUsername == username ? (
-                <Button sx={{ ml: 4 }} endIcon={<MdEdit />}>
+                <Button sx={{ ml: 4 }} endIcon={<MdEdit />} size="small">
                   Edit profile
                 </Button>
               ) : user.following.includes(currentUserId) !== followChanged ? (
-                <Button onClick={handleUnfollow}>Unfollow</Button>
+                <Button size="small" onClick={handleUnfollow}>
+                  Unfollow
+                </Button>
               ) : (
-                <Button onClick={handleFollow}>
+                <Button onClick={handleFollow} size="small">
                   {user.following.includes(currentUserId) ? "Follow Back" : "Follow"}
                 </Button>
               )}
             </Stack>
-            <Stack flexDirection={"row"} alignItems={"center"} gap={2} my={4}>
+            <Stack
+              display={{ xs: "none", sm: "flex" }}
+              flexDirection={"row"}
+              alignItems={"center"}
+              gap={2}
+              my={4}
+            >
+              <Typography bgcolor="#f2f2f2" borderRadius={1} py={1} px={2}>
+                <b>{user.postsCount}Post</b>
+              </Typography>
+              <Button sx={{ py: 1, px: 2 }} disableElevation color="light">
+                <b>{user.followers.length}&nbsp;</b>Followers
+              </Button>
+              <Button sx={{ py: 1, px: 2 }} disableElevation color="light">
+                <b>{user.following.length}&nbsp;</b>Following
+              </Button>
+            </Stack>
+          </Grid>
+          <Grid size={12}>
+            <Stack
+              display={{ xs: "flex", sm: "none" }}
+              flexDirection={"row"}
+              alignItems={"center"}
+              gap={2}
+              my={2}
+            >
               <Typography bgcolor="#f2f2f2" borderRadius={1} py={1} px={2}>
                 <b>{user.postsCount}Post</b>
               </Typography>
