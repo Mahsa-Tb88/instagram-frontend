@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 
 type PostContentProps = {
   post: Post;
-  hideDialog: () => voids;
+  hideDialog: () => void;
 };
 export default function PostContent({ post, hideDialog }: PostContentProps) {
   const username = useUserStore((state) => state.username);
@@ -67,7 +67,6 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
     );
   }
 
-  
   return (
     <Container disableGutters>
       <Grid container spacing={3} my={5}>

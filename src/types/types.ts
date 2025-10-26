@@ -62,5 +62,5 @@ export type Profile = {
   followers: string;
   following: string;
   bio: string;
-  postsCount: number;
+  postCounts: number;
 };

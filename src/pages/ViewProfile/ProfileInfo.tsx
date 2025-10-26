@@ -92,7 +92,7 @@ export default function ProfileInfo() {
               my={4}
             >
               <Typography bgcolor="#f2f2f2" borderRadius={1} py={1} px={2}>
-                <b>{user.postsCount}Post</b>
+                <b>{user.postCounts}&nbsp;</b>Post
               </Typography>
               <Button sx={{ py: 1, px: 2 }} disableElevation color="light">
                 <b>{user.followers.length}&nbsp;</b>Followers
@@ -111,13 +111,13 @@ export default function ProfileInfo() {
               my={2}
             >
               <Typography bgcolor="#f2f2f2" borderRadius={1} py={1} px={2}>
-                <b>{user.postsCount}Post</b>
+                <b>{user.postCounts}&nbsp; Post</b>
               </Typography>
               <Button sx={{ py: 1, px: 2 }} disableElevation color="light">
                 <b>{user.followers.length}&nbsp;</b>Followers
               </Button>
               <Button sx={{ py: 1, px: 2 }} disableElevation color="light">
-                <b>{user.following.length}&nbsp;</b>Following
+                <b>{user.following.length}&nbsp;</b>Following.
               </Button>
             </Stack>
           </Grid>
