@@ -10,3 +10,4 @@ export type InitResponse = Response & { body: { user: User | null; suggested: Us
 export type FeedResponse = Response & { body: { count: number; posts: Post[] } };
 export type GetPostResponse = Response & { body: Post };
 export type GetProfileResponse = Response & { body: Profile };
+export type GetUserPostsResponse = Response & { body: { Posts: Post[]; count: number } };

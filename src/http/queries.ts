@@ -4,6 +4,7 @@ import {
   GetProfileResponse,
   type FeedResponse,
   type GetPostResponse,
+  type GetUserPostsResponse,
   type InitResponse,
 } from "./responseTypes";
 
@@ -62,3 +63,25 @@ export function useGetProfile(username: string) {
     queryFn: () => axios.get<GetProfileResponse>("/users/" + username),
   });
 }
+
+export function useGetUserPosts(username: string, limit: number) {
+  return useInfiniteQuery({
+    queryKey: ["userPosts", limit],
+    initialPageParam: 1,
+    queryFn: ({ pageParam }: { pageParam: number }) =>
+      axios.get<GetUserPostsResponse>("/posts/" + username + "/posts", {
+        params: { page: pageParam, limit },
+      }),
+    getNextPageParam(lastPage, pages, lastPageParam) {
+      const totalPosts = lastPage.data.body.count;
+      const totalPages = Math.ceil(totalPosts / limit);
+      if (totalPages > pages.length) {
+        return lastPageParam + 1;
+      } else {
+        return;
+      }
+    },
+  });
+}
+
+
