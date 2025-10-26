@@ -30,7 +30,7 @@ export default function UserPosts() {
         <Grid container columnSpacing={{ xs: 2, sm: 3, lg: 4 }} mb={3}>
           {data?.pages?.map((page) => {
             return page.data.body.posts.map((p) => (
-              <Grid size={{ xs: 12, md: 4 }}>
+              <Grid size={{ xs: 12, md: 6, lg: 4 }}>
                 <UserPost key={p._id} post={p} />
               </Grid>
             ));
