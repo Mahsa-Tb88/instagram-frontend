@@ -7,35 +7,35 @@ import { useInView } from "react-intersection-observer";
 import LoadingError from "../../components/LoadingError";
 import { useEffect } from "react";
 import Post from "../Home/Post";
+import UserPost from "./UserPost";
 
 export default function UserPosts() {
   const { username } = useParams<{ username: string }>();
-  const { data, error, fetchNextPage, hasNextPage, isFetching, isPending, refetch } =
-    useGetUserPosts(username!, 9);
+  const { data, error, fetchNextPage, hasNextPage, isFetching, refetch } = useGetUserPosts(
+    username!,
+    9
+  );
   const { ref, inView } = useInView({ rootMargin: "150px" });
   useEffect(() => {
     if (inView && hasNextPage && !isFetching) {
       fetchNextPage();
     }
   }, [inView]);
-
+  console.log("userPosts...", data);
   const postExists: boolean = !!data?.pages?.[0]?.data?.body?.count;
 
-  console.log("data...", data);
   return (
-    <Stack>
-      <Box maxWidth={600} mx="auto">
-        {data?.pages?.map((page) => {
-          return (
-            <Grid container>
+    <Stack my={4}>
+      <Box maxWidth={800} mx="auto">
+        <Grid container columnSpacing={{ xs: 2, sm: 3, lg: 4 }} mb={3}>
+          {data?.pages?.map((page) => {
+            return page.data.body.posts.map((p) => (
               <Grid size={{ xs: 12, md: 4 }}>
-                {page.data.body.posts.map((p) => (
-                  <Post key={p._id} post={p} />
-                ))}
+                <UserPost key={p._id} post={p} />
               </Grid>
-            </Grid>
-          );
-        })}
+            ));
+          })}
+        </Grid>
 
         {isFetching && (
           <Box textAlign="center">
