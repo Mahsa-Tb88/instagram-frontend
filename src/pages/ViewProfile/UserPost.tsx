@@ -16,6 +16,7 @@ import React, { useState } from "react";
 import type { Post } from "../../types/types";
 import { MdComment, MdDelete, MdEdit, MdFavorite } from "react-icons/md";
 import { useUserStore } from "../../store/store";
+import { useLikePost, useUnlikePost } from "../../http/mutation";
 
 type PostProps = { post: Post };
 export default function UserPost({ post }: PostProps) {
@@ -24,6 +25,28 @@ export default function UserPost({ post }: PostProps) {
   const liked = post.likes.includes(userId);
   const [likeChanged, setLikeChanged] = useState(false);
   const [hover, setHover] = useState(false);
+
+  const likePost = useLikePost();
+  const unlikePost = useUnlikePost();
+
+  function handleLikeUnlikePost() {
+    setLikeChanged(!likeChanged);
+
+    if (liked !== likeChanged) {
+      unlikePost.mutate(post._id, {
+        onError() {
+          setLikeChanged(likeChanged);
+        },
+      });
+    } else {
+      likePost.mutate(post._id, {
+        onError() {
+          setLikeChanged(likeChanged);
+        },
+      });
+    }
+  }
+
   return (
     <Stack my={3}>
       <Card
@@ -108,7 +131,7 @@ export default function UserPost({ post }: PostProps) {
             }}
           >
             {/* Likes */}
-            <Box display="flex" alignItems="center" gap={1}>
+            <Box display="flex" alignItems="center" gap={1} onClick={handleLikeUnlikePost}>
               <IconButton>
                 {liked !== likeChanged ? (
                   <MdFavorite color="red" size={24} />
