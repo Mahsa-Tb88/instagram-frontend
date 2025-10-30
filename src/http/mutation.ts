@@ -56,3 +56,8 @@ export function useInsertComment() {
       axios.post("/posts/" + data.id + "/comment", data, { timeout: 3000 }),
   });
 }
+export function useDeletePost() {
+  return useMutation({
+    mutationFn: (data: { id: string }) => axios.delete("/posts/" + data.id),
+  });
+}

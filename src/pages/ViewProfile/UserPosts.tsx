@@ -6,7 +6,6 @@ import UserPostsSkeleton from "./skeletons/UserPostsSkeleton";
 import { useInView } from "react-intersection-observer";
 import LoadingError from "../../components/LoadingError";
 import { useEffect } from "react";
-import Post from "../Home/Post";
 import UserPost from "./UserPost";
 
 export default function UserPosts() {
@@ -21,7 +20,6 @@ export default function UserPosts() {
       fetchNextPage();
     }
   }, [inView]);
-  console.log("userPosts...", data);
   const postExists: boolean = !!data?.pages?.[0]?.data?.body?.count;
 
   return (

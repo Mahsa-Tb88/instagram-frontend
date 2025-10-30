@@ -55,17 +55,11 @@ export default function Post({ post }: PostProps) {
         onError() {
           setLikeChanged(likeChanged);
         },
-        onSuccess() {
-          setLikeChanged(!likeChanged);
-        },
       });
     } else {
       likeMutation.mutate(post._id, {
         onError() {
           setLikeChanged(likeChanged);
-        },
-        onSuccess() {
-          setLikeChanged(!likeChanged);
         },
       });
     }

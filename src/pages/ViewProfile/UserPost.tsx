@@ -17,6 +17,7 @@ import type { Post } from "../../types/types";
 import { MdComment, MdDelete, MdEdit, MdFavorite } from "react-icons/md";
 import { useUserStore } from "../../store/store";
 import { useLikePost, useUnlikePost } from "../../http/mutation";
+import { showConfirmDialog } from "../../components/Dialogs/ConfirmDialog";
 
 type PostProps = { post: Post };
 export default function UserPost({ post }: PostProps) {
@@ -34,24 +35,20 @@ export default function UserPost({ post }: PostProps) {
 
     if (liked !== likeChanged) {
       unlikePost.mutate(post._id, {
-        onSuccess() {
-          console.log("yes");
-        },
         onError() {
           setLikeChanged(likeChanged);
         },
       });
     } else {
       likePost.mutate(post._id, {
-        onSuccess() {
-          console.log("yes");
-        },
         onError() {
           setLikeChanged(likeChanged);
         },
       });
     }
   }
+
+  async function handleDeletePost() {}
 
   return (
     <Stack my={3}>
@@ -97,6 +94,7 @@ export default function UserPost({ post }: PostProps) {
                   transition: "opacity 0.3s",
                 }}
                 color="error"
+                onClick={handleDeletePost}
               >
                 {username == post.user.username && <MdDelete size={14} />}
               </IconButton>
