@@ -34,12 +34,18 @@ export default function UserPost({ post }: PostProps) {
 
     if (liked !== likeChanged) {
       unlikePost.mutate(post._id, {
+        onSuccess() {
+          console.log("yes");
+        },
         onError() {
           setLikeChanged(likeChanged);
         },
       });
     } else {
       likePost.mutate(post._id, {
+        onSuccess() {
+          console.log("yes");
+        },
         onError() {
           setLikeChanged(likeChanged);
         },
