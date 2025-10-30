@@ -58,6 +58,6 @@ export function useInsertComment() {
 }
 export function useDeletePost() {
   return useMutation({
-    mutationFn: (data: { id: string }) => axios.delete("/posts/" + data.id),
+    mutationFn: (id: string) => axios.delete("/posts/" + id),
   });
 }

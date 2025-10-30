@@ -1,23 +1,20 @@
 import {
-  Avatar,
   Box,
-  Button,
   Card,
   CardActions,
-  CardContent,
   CardHeader,
   CardMedia,
   IconButton,
-  Paper,
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import type { Post } from "../../types/types";
 import { MdComment, MdDelete, MdEdit, MdFavorite } from "react-icons/md";
 import { useUserStore } from "../../store/store";
-import { useLikePost, useUnlikePost } from "../../http/mutation";
+import { useDeletePost, useLikePost, useUnlikePost } from "../../http/mutation";
 import { showConfirmDialog } from "../../components/Dialogs/ConfirmDialog";
+import { toast } from "react-toastify";
 
 type PostProps = { post: Post };
 export default function UserPost({ post }: PostProps) {
@@ -29,6 +26,7 @@ export default function UserPost({ post }: PostProps) {
 
   const likePost = useLikePost();
   const unlikePost = useUnlikePost();
+  const deletePost = useDeletePost();
 
   function handleLikeUnlikePost() {
     setLikeChanged(!likeChanged);
@@ -48,7 +46,21 @@ export default function UserPost({ post }: PostProps) {
     }
   }
 
-  async function handleDeletePost() {}
+  async function handleDeletePost() {
+    const answer = await showConfirmDialog(
+      <p style={{ fontSize: 24 }}>Are you sure you want to delete this post</p>,
+      "Yes",
+      "No"
+    );
+    if (answer) {
+      deletePost.mutate(post._id, {
+        onError(e) {
+          console.log(e);
+          toast.error(e.message);
+        },
+      });
+    }
+  }
 
   return (
     <Stack my={3}>

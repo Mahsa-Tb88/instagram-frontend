@@ -9,7 +9,7 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import  { useState } from "react";
 import type { Post } from "../../types/types";
 import { Link } from "react-router";
 import parse from "html-react-parser";
@@ -21,7 +21,6 @@ import { showViewPostDialog } from "../../components/Dialogs/ViewPostDialog/View
 type PostProps = { post: Post };
 export default function Post({ post }: PostProps) {
   const [followChanged, setFollowChanged] = useState(false);
-  console.log("post is", post);
   const userId = useUserStore((state) => state._id);
   const liked = post.likes.includes(userId);
   const [likeChanged, setLikeChanged] = useState(false);

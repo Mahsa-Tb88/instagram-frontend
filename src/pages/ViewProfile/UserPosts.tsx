@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, CircularProgress, Grid, Stack, Typography } from "@mui/material";
+import { Box, Grid, Stack, Typography } from "@mui/material";
 import { useParams } from "react-router";
 import { useGetUserPosts } from "../../http/queries";
 import UserPostsSkeleton from "./skeletons/UserPostsSkeleton";
