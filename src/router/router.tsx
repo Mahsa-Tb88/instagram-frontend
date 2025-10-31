@@ -7,6 +7,7 @@ import MainLayout from "../layouts/Main/MainLayout";
 import HomePage from "../pages/Home/HomePage";
 import ViewProfilePage from "../pages/ViewProfile/ViewProfilePage";
 import EditProfilePage from "../pages/EditProfile/EditProfilePage";
+import EditPost from "../pages/Post/EditPost";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
           { index: true, element: <HomePage /> },
           { path: "user/:username", element: <ViewProfilePage /> },
           { path: "user/profile/edit", element: <EditProfilePage /> },
+          { path: "user/post/edit", element: <EditPost /> },
         ],
       },
     ],
