@@ -17,6 +17,7 @@ import { showConfirmDialog } from "../../components/Dialogs/ConfirmDialog";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import { showViewPostDialog } from "../../components/Dialogs/ViewPostDialog/ViewPostDialog";
+import { Link } from "react-router";
 
 type PostProps = { post: Post };
 export default function UserPost({ post }: PostProps) {
@@ -101,6 +102,8 @@ export default function UserPost({ post }: PostProps) {
                   transition: "opacity 0.3s",
                 }}
                 color="info"
+                LinkComponent={Link}
+                to="/user/post/edit"
               >
                 {username == post.user.username && <MdEdit size={14} />}
               </IconButton>
