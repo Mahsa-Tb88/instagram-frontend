@@ -103,7 +103,7 @@ export default function UserPost({ post }: PostProps) {
                 }}
                 color="info"
                 LinkComponent={Link}
-                to="/user/post/edit"
+                to={"/user/post/edit/" + post._id}
               >
                 {username == post.user.username && <MdEdit size={14} />}
               </IconButton>
