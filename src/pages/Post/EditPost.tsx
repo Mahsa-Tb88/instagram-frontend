@@ -2,7 +2,7 @@ import { useParams } from "react-router";
 import { useGetPost } from "../../http/queries";
 import ViewPostSkeleton from "../../components/Dialogs/ViewPostDialog/ViewPostSkeleton";
 import LoadingError from "../../components/LoadingError";
-import PostContent from "../../components/Dialogs/ViewPostDialog/PostContent";
+import SinglePostEdit from "./SinglePostEdit";
 
 export default function EditPost() {
   const { postId } = useParams<{ postId: string }>();
@@ -15,6 +15,6 @@ export default function EditPost() {
   ) : error ? (
     <LoadingError message={error.message} handleAction={refetch} />
   ) : (
-    <PostContent post={post!} hideDialog={() => {}} />
+    <SinglePostEdit post={post!} />
   );
 }

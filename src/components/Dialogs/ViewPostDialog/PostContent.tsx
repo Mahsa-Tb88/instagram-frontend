@@ -21,7 +21,6 @@ type PostContentProps = {
   hideDialog: () => void;
 };
 
-
 export default function PostContent({ post, hideDialog }: PostContentProps) {
   const username = useUserStore((state) => state.username);
   const profilePicture = useUserStore((state) => state.profilePicture);
@@ -97,6 +96,7 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
                 <Typography color="text.secondary">{post.updatedAt.slice(0, 10)}</Typography>
               </Stack>
             </Stack>
+
             <Typography sx={{ mt: 1, fontSize: 12, textAlign: "justify" }}>
               {post.caption}
             </Typography>
