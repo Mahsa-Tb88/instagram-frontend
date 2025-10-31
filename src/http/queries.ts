@@ -83,5 +83,3 @@ export function useGetUserPosts(username: string, limit: number) {
     },
   });
 }
-
-

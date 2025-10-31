@@ -15,6 +15,7 @@ import { useUserStore } from "../../store/store";
 import { useDeletePost, useLikePost, useUnlikePost } from "../../http/mutation";
 import { showConfirmDialog } from "../../components/Dialogs/ConfirmDialog";
 import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
 
 type PostProps = { post: Post };
 export default function UserPost({ post }: PostProps) {
@@ -27,6 +28,7 @@ export default function UserPost({ post }: PostProps) {
   const likePost = useLikePost();
   const unlikePost = useUnlikePost();
   const deletePost = useDeletePost();
+  const client = useQueryClient();
 
   function handleLikeUnlikePost() {
     setLikeChanged(!likeChanged);
@@ -54,6 +56,10 @@ export default function UserPost({ post }: PostProps) {
     );
     if (answer) {
       deletePost.mutate(post._id, {
+        onSuccess() {
+          console.log("success");
+          client.invalidateQueries({ queryKey: ["userPosts", 10] });
+        },
         onError(e) {
           console.log(e);
           toast.error(e.message);
