@@ -12,6 +12,8 @@ export default function SinglePostEdit({ post }: { post: Post }) {
 
   const [caption, setCaption] = useState(post.caption);
 
+  
+
   return (
     <Container disableGutters>
       <Grid container spacing={3} my={5}>
