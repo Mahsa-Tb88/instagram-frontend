@@ -4,6 +4,8 @@ import { Container, Grid } from "@mui/material";
 import type { Post } from "../../types/types";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import { useEditPost } from "../../http/mutation";
+import { toast } from "react-toastify";
 export default function SinglePostEdit({ post }: { post: Post }) {
   const navigate = useNavigate();
   function handleGotoProfile() {
@@ -12,7 +14,21 @@ export default function SinglePostEdit({ post }: { post: Post }) {
 
   const [caption, setCaption] = useState(post.caption);
 
-  
+  const { isPending, mutate } = useEditPost();
+
+  function handleSave() {
+    mutate(
+      { caption, id: post._id },
+      {
+        onSuccess() {
+          toast.success("Caption was updated successfully!");
+        },
+        onError() {
+          setCaption(post.caption);
+        },
+      }
+    );
+  }
 
   return (
     <Container disableGutters>
@@ -48,12 +64,13 @@ export default function SinglePostEdit({ post }: { post: Post }) {
               onChange={(e) => setCaption(e.target.value)}
               fullWidth
               multiline
+              disabled={isPending}
             />
             <Button
               size="small"
               sx={{ mt: 2 }}
-              // onClick={handleComment}
-              disabled={post.caption.length == caption.length}
+              onClick={handleSave}
+              disabled={post.caption.length == caption.length || isPending}
             >
               save
             </Button>
