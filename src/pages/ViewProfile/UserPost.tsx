@@ -16,6 +16,7 @@ import { useDeletePost, useLikePost, useUnlikePost } from "../../http/mutation";
 import { showConfirmDialog } from "../../components/Dialogs/ConfirmDialog";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
+import { showViewPostDialog } from "../../components/Dialogs/ViewPostDialog/ViewPostDialog";
 
 type PostProps = { post: Post };
 export default function UserPost({ post }: PostProps) {
@@ -168,7 +169,7 @@ export default function UserPost({ post }: PostProps) {
 
             {/* Comments */}
             <Box display="flex" alignItems="center" gap={1}>
-              <IconButton sx={{ color: "white" }}>
+              <IconButton sx={{ color: "white" }} onClick={() => showViewPostDialog(post._id)}>
                 <MdComment size={24} />
               </IconButton>
               <Typography sx={{ color: "white", fontSize: 14 }}>{post.comments.length}</Typography>
