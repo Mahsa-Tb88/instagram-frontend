@@ -20,6 +20,8 @@ type PostContentProps = {
   post: Post;
   hideDialog: () => void;
 };
+
+
 export default function PostContent({ post, hideDialog }: PostContentProps) {
   const username = useUserStore((state) => state.username);
   const profilePicture = useUserStore((state) => state.profilePicture);

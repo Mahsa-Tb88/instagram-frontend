@@ -1,13 +1,20 @@
-import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useGetPost } from "../../http/queries";
-import { Stack } from "@mui/material";
 import ViewPostSkeleton from "../../components/Dialogs/ViewPostDialog/ViewPostSkeleton";
+import LoadingError from "../../components/LoadingError";
+import PostContent from "../../components/Dialogs/ViewPostDialog/PostContent";
 
 export default function EditPost() {
   const { postId } = useParams<{ postId: string }>();
-
   const { isPending, refetch, data, error } = useGetPost(postId!);
 
-  return <Stack>{isPending ? <ViewPostSkeleton /> : ""}</Stack>;
+  const post = data?.data?.body;
+
+  return isPending ? (
+    <ViewPostSkeleton />
+  ) : error ? (
+    <LoadingError message={error.message} handleAction={refetch} />
+  ) : (
+    <PostContent post={post!} hideDialog={() => {}} />
+  );
 }
