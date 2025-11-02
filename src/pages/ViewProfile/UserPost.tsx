@@ -1,9 +1,12 @@
 import {
   Box,
+  Button,
   Card,
   CardActions,
+  CardContent,
   CardHeader,
   CardMedia,
+  Divider,
   IconButton,
   Stack,
   Typography,
@@ -76,7 +79,7 @@ export default function UserPost({ post }: PostProps) {
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         sx={{
-          height: 360,
+          height: 400,
           position: "relative",
           width: "100%",
           borderRadius: 2,
@@ -125,6 +128,14 @@ export default function UserPost({ post }: PostProps) {
         />
 
         <CardMedia src={SERVER_URL + post.image} component="img" alt="post image" />
+        <Divider sx={{ mt: 1 }} />
+        <CardContent>
+          {post.caption.length > 40 ? (
+            <Typography>{post.caption.slice(0, 50)} ... </Typography>
+          ) : (
+            <Typography>{post.caption}</Typography>
+          )}
+        </CardContent>
         <Box
           sx={{
             position: "absolute",
@@ -139,6 +150,7 @@ export default function UserPost({ post }: PostProps) {
           }}
           aria-hidden={!hover}
         />
+
         {hover && (
           <CardActions
             sx={{
