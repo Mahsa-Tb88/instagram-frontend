@@ -149,6 +149,7 @@ export default function UserPost({ post }: PostProps) {
             pointerEvents: "none", // let mouse pass through to card
           }}
           aria-hidden={!hover}
+          onClick={() => showViewPostDialog(post._id)}
         />
 
         {hover && (
