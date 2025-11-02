@@ -1,8 +1,8 @@
 import { useParams } from "react-router";
 import { useGetPost } from "../../http/queries";
-import ViewPostSkeleton from "../../components/Dialogs/ViewPostDialog/ViewPostSkeleton";
 import LoadingError from "../../components/LoadingError";
 import SinglePostEdit from "./SinglePostEdit";
+import SkeletonEditPost from "./SkeletonEditPost";
 
 export default function EditPost() {
   const { postId } = useParams<{ postId: string }>();
@@ -11,7 +11,7 @@ export default function EditPost() {
   const post = data?.data?.body;
 
   return isPending ? (
-    <ViewPostSkeleton />
+    <SkeletonEditPost />
   ) : error ? (
     <LoadingError message={error.message} handleAction={refetch} />
   ) : (

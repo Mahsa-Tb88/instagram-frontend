@@ -7,12 +7,13 @@ import { useState } from "react";
 import { useEditPost } from "../../http/mutation";
 import { toast } from "react-toastify";
 export default function SinglePostEdit({ post }: { post: Post }) {
+  console.log("post", post);
   const navigate = useNavigate();
   function handleGotoProfile() {
     navigate("/user/" + post.user.username);
   }
 
-  const [caption, setCaption] = useState(post.caption);
+  const [caption, setCaption] = useState(post?.caption);
 
   const { isPending, mutate } = useEditPost();
 
