@@ -15,7 +15,6 @@ export default function UserPosts() {
     9
   );
 
-  console.log("is Fetching", isFetching);
   const { ref, inView } = useInView({ rootMargin: "150px" });
   useEffect(() => {
     if (inView && hasNextPage && !isFetching) {
@@ -23,9 +22,7 @@ export default function UserPosts() {
     }
   }, [inView]);
   const postExists: boolean = !!data?.pages?.[0]?.data?.body?.count;
-  // if (true) {
-  //   return <UserPostsSkeleton />;
-  // }
+
   return (
     <Stack my={4}>
       {isFetching && <UserPostsSkeleton />}

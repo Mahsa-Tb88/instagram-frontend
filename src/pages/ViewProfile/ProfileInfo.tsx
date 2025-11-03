@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { useGetProfile } from "../../http/queries";
 import ProfileInfoSkeleton from "./skeletons/ProfileInfoSkeleton";
 import { Avatar, Button, Grid, Stack, Typography } from "@mui/material";
@@ -71,7 +71,13 @@ export default function ProfileInfo() {
             <Stack flexDirection={"row"} alignItems={"center"} gap={2}>
               <Typography>{user.fullname}</Typography>
               {currentUsername == username ? (
-                <Button sx={{ ml: 4 }} endIcon={<MdEdit />} size="small">
+                <Button
+                  sx={{ ml: 4 }}
+                  endIcon={<MdEdit />}
+                  size="small"
+                  component={Link}
+                  to={"/user/profile/edit/" + username}
+                >
                   Edit profile
                 </Button>
               ) : user.following.includes(currentUserId) !== followChanged ? (
