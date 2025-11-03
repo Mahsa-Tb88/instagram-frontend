@@ -14,6 +14,8 @@ export default function UserPosts() {
     username!,
     9
   );
+
+  console.log("is Fetching", isFetching);
   const { ref, inView } = useInView({ rootMargin: "150px" });
   useEffect(() => {
     if (inView && hasNextPage && !isFetching) {
@@ -21,9 +23,13 @@ export default function UserPosts() {
     }
   }, [inView]);
   const postExists: boolean = !!data?.pages?.[0]?.data?.body?.count;
-
+  // if (true) {
+  //   return <UserPostsSkeleton />;
+  // }
   return (
     <Stack my={4}>
+      {isFetching && <UserPostsSkeleton />}
+
       <Box maxWidth={800} mx="auto">
         <Grid container columnSpacing={{ xs: 2, sm: 3, lg: 4 }} mb={3}>
           {data?.pages?.map((page) => {
@@ -34,12 +40,6 @@ export default function UserPosts() {
             ));
           })}
         </Grid>
-
-        {isFetching && (
-          <Box textAlign="center">
-            <UserPostsSkeleton />
-          </Box>
-        )}
 
         {!hasNextPage && !isFetching && !error && (
           <Box textAlign="center" bgcolor="#eee" p={4}>

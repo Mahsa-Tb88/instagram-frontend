@@ -1,4 +1,4 @@
-import { Grid, Skeleton, Stack } from "@mui/material";
+import { Grid, Skeleton } from "@mui/material";
 
 export default function UserPostsSkeleton() {
   return (

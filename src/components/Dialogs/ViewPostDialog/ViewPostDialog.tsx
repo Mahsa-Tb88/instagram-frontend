@@ -12,6 +12,7 @@ import type { Post } from "../../../types/types";
 import { useQueryClient } from "@tanstack/react-query";
 
 let showViewPostDialog: (s: string) => void;
+// eslint-disable-next-line react-refresh/only-export-components
 export { showViewPostDialog };
 
 export default function ViewPostDialog() {
