@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import LoadingError from "../../components/LoadingError";
 import SkeletonEditProfile from "./SkeletonEditProfile";
 import { MdClose, MdHome } from "react-icons/md";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import type { RegisterErrorObject } from "../../types/types";
 import { useEditProfile } from "../../http/mutation";
 
@@ -15,15 +15,40 @@ export default function EditProfilePage() {
   const { mutate, isPending } = useEditProfile();
   const user = data?.data?.body;
 
-  const [username, setUsername] = useState(user?.username);
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [email, setEmail] = useState(user?.username);
+  const [bio, setBio] = useState(user?.bio);
+  const [email, setEmail] = useState(user?.email);
   const [fullname, setFullName] = useState(user?.fullname);
   const [errors, setErrors] = useState<RegisterErrorObject>({});
 
   function profilePictureHandler() {}
-  function handleSubmit(event: FormEvent) {}
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    setErrors({});
+    const e: RegisterErrorObject = {};
+
+    if (password.length < 6) {
+      e.password = "Password must be at least 6 characters long";
+    }
+    if (confirm !== password) {
+      e.confirm = "Passwords do not match";
+    }
+    if (!/.+@.+\..+/.test(email!)) {
+      e.email = "Please enter a valid email address";
+    }
+    if (bio?.length && bio.length > 100) {
+      e.password = "Bio must not exceed 100 characters";
+    }
+    if (fullname?.length && fullname!.length < 2) {
+      e.fullname = "Fullname must be at least 2 characters long";
+    }
+
+    if (Object.keys(e).length > 0) {
+      setErrors(e);
+      return;
+    }
+  }
 
   return (
     <Stack width={"80%"} sx={{ mx: 2, my: 6 }}>
@@ -50,12 +75,13 @@ export default function EditProfilePage() {
             Edit Profile
           </Typography>
           <Stack gap={4}>
-            <TextField value={username} label="username" disabled />
+            <TextField value={user?.username} label="username" disabled />
             <TextField
               value={fullname}
               label="Fullname"
               onChange={(e) => setFullName(e.target.value)}
             />
+            <TextField value={bio} label="Bio" onChange={(e) => setBio(e.target.value)} />
             <TextField value={email} label="Email" onChange={(e) => setEmail(e.target.value)} />
             <TextField
               label="Password"
