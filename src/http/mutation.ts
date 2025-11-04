@@ -60,11 +60,24 @@ export function useInsertComment() {
 export function useEditPost() {
   return useMutation({
     mutationFn: (data: { id: string; caption: string }) =>
-      axios.post("/posts/" + data.id , data, { timeout: 3000 }),
+      axios.post("/posts/" + data.id, data, { timeout: 3000 }),
   });
 }
 export function useDeletePost() {
   return useMutation({
     mutationFn: (id: string) => axios.delete("/posts/" + id),
+  });
+}
+
+export function useEditProfile() {
+  return useMutation({
+    mutationFn: (data: {
+      id: string;
+      email: string;
+      bio: string;
+      fullname: string;
+      password: string;
+      profilePicture: string;
+    }) => axios.post("/users/" + data.id + "/profile", data),
   });
 }

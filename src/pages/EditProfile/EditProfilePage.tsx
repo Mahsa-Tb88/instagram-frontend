@@ -3,14 +3,18 @@ import { useGetProfile } from "../../http/queries";
 import { useNavigate, useParams } from "react-router";
 import LoadingError from "../../components/LoadingError";
 import SkeletonEditProfile from "./SkeletonEditProfile";
-import { MdClose, MdDelete, MdHome } from "react-icons/md";
+import { MdClose, MdHome } from "react-icons/md";
+import { useState } from "react";
+import type { RegisterErrorObject } from "../../types/types";
 
 export default function EditProfilePage() {
   const { username } = useParams<{ username: string }>();
   const navigate = useNavigate();
   const { data, isPending, error, refetch } = useGetProfile(username!);
   const user = data?.data?.body;
-  console.log("error", error);
+
+  function profilePictureHandler() {}
+
   return (
     <Stack width={"80%"} sx={{ mx: 2, my: 6 }}>
       {isPending ? (
@@ -75,6 +79,7 @@ export default function EditProfilePage() {
                     bgcolor: "rgba(255, 0, 0, 0.8)",
                   },
                 }}
+                onClick={profilePictureHandler}
               >
                 <MdClose />
               </IconButton>
