@@ -6,18 +6,28 @@ import SkeletonEditProfile from "./SkeletonEditProfile";
 import { MdClose, MdHome } from "react-icons/md";
 import { useState } from "react";
 import type { RegisterErrorObject } from "../../types/types";
+import { useEditProfile } from "../../http/mutation";
 
 export default function EditProfilePage() {
-  const { username } = useParams<{ username: string }>();
+  const params = useParams<{ username: string }>();
   const navigate = useNavigate();
-  const { data, isPending, error, refetch } = useGetProfile(username!);
+  const { data, isFetching, error, refetch } = useGetProfile(params.username!);
+  const { mutate, isPending } = useEditProfile();
   const user = data?.data?.body;
 
+  const [username, setUsername] = useState(user?.username);
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [email, setEmail] = useState(user?.username);
+  const [fullname, setFullName] = useState(user?.fullname);
+  const [errors, setErrors] = useState<RegisterErrorObject>({});
+
   function profilePictureHandler() {}
+  function handleSubmit(event: FormEvent) {}
 
   return (
     <Stack width={"80%"} sx={{ mx: 2, my: 6 }}>
-      {isPending ? (
+      {isFetching ? (
         <SkeletonEditProfile />
       ) : error ? (
         <LoadingError
@@ -35,16 +45,28 @@ export default function EditProfilePage() {
           actionIcon={error.status === 404 && <MdHome />}
         />
       ) : (
-        <Stack maxWidth={"60%"} gap={3}>
+        <Stack maxWidth={"60%"} gap={3} onSubmit={handleSubmit}>
           <Typography component="h3" variant="h3" mb={1}>
             Edit Profile
           </Typography>
           <Stack gap={4}>
-            <TextField value={user?.username} label="username" disabled />
-            <TextField value={user?.fullname} label="Fullname" />
-            <TextField value={user?.email} label="Email" />
-            <TextField label="Password" />
-            <TextField label="Confirm Password" />
+            <TextField value={username} label="username" disabled />
+            <TextField
+              value={fullname}
+              label="Fullname"
+              onChange={(e) => setFullName(e.target.value)}
+            />
+            <TextField value={email} label="Email" onChange={(e) => setEmail(e.target.value)} />
+            <TextField
+              label="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <TextField
+              label="Confirm Password"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+            />
           </Stack>
           <Stack flexDirection={"row"} alignItems={"center"}>
             <Typography sx={{ mr: 3 }}>Profile Picture</Typography>
@@ -86,7 +108,9 @@ export default function EditProfilePage() {
             </Stack>
           </Stack>
 
-          <Button>Save Changes</Button>
+          <Button type="submit" disabled={isPending} size="large">
+            Save Changes
+          </Button>
         </Stack>
       )}
     </Stack>
