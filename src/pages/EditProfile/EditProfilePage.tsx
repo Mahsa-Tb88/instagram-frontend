@@ -3,10 +3,11 @@ import { useGetProfile } from "../../http/queries";
 import { useNavigate, useParams } from "react-router";
 import LoadingError from "../../components/LoadingError";
 import SkeletonEditProfile from "./SkeletonEditProfile";
-import { MdClose, MdHome } from "react-icons/md";
+import { MdClose, MdHome, MdUpload } from "react-icons/md";
 import { useState, type FormEvent } from "react";
 import type { RegisterErrorObject } from "../../types/types";
 import { useEditProfile } from "../../http/mutation";
+import noImage from "../../assets/images/no-image.jpg";
 
 export default function EditProfilePage() {
   const params = useParams<{ username: string }>();
@@ -14,16 +15,21 @@ export default function EditProfilePage() {
   const { data, isFetching, error, refetch } = useGetProfile(params.username!);
   const { mutate, isPending } = useEditProfile();
   const user = data?.data?.body;
-
+  console.log("user...", user);
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [bio, setBio] = useState(user!.bio);
-  const [email, setEmail] = useState(user!.email);
-  const [profilePicture, setProfilePicture] = useState(user!.profilePicture);
-  const [fullname, setFullName] = useState(user!.fullname);
+  const [bio, setBio] = useState(user?.bio);
+  const [email, setEmail] = useState(user?.email);
+  const [profilePicture, setProfilePicture] = useState(user?.profilePicture);
+  const [fullname, setFullName] = useState(user?.fullname);
   const [errors, setErrors] = useState<RegisterErrorObject>({});
 
-  function profilePictureHandler() {}
+  function profilePictureHandler() {
+    if (profilePicture) {
+      setProfilePicture("");
+    }
+  }
+
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
     setErrors({});
@@ -113,7 +119,7 @@ export default function EditProfilePage() {
                 height: "120px",
                 borderRadius: "50%",
                 borderColor: "red",
-                border: "2px solid rgba(255, 0, 0, 0.6)",
+                border: "2px solid rgba(52, 51, 51, 0.6)",
                 overflow: "hidden",
                 alignItems: "center",
                 justifyContent: "center",
@@ -122,7 +128,7 @@ export default function EditProfilePage() {
             >
               <Box
                 component={"img"}
-                src={SERVER_URL + profilePicture}
+                src={profilePicture ? SERVER_URL + profilePicture : noImage}
                 alt="profile image"
                 sx={{ objectFit: "contain", width: "100%", height: "100%" }}
               />
@@ -132,15 +138,15 @@ export default function EditProfilePage() {
                   top: "50%",
                   left: "50%",
                   transform: "translate(-50%, -50%)",
-                  bgcolor: "rgba(255, 0, 0, 0.6)",
+                  bgcolor: profilePicture ? "rgba(255, 0, 0, 0.6)" : "rgba(39, 159, 67, 0.78)",
                   color: "white",
                   "&:hover": {
-                    bgcolor: "rgba(255, 0, 0, 0.8)",
+                    bgcolor: profilePicture ? "rgba(255, 0, 0, 0.8)" : "rgba(13, 197, 56, 0.6)",
                   },
                 }}
                 onClick={profilePictureHandler}
               >
-                <MdClose />
+                {profilePicture ? <MdClose /> : <MdUpload />}
               </IconButton>
             </Stack>
           </Stack>
