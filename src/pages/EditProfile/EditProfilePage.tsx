@@ -17,9 +17,10 @@ export default function EditProfilePage() {
 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [bio, setBio] = useState(user?.bio);
-  const [email, setEmail] = useState(user?.email);
-  const [fullname, setFullName] = useState(user?.fullname);
+  const [bio, setBio] = useState(user!.bio);
+  const [email, setEmail] = useState(user!.email);
+  const [profilePicture, setProfilePicture] = useState(user!.profilePicture);
+  const [fullname, setFullName] = useState(user!.fullname);
   const [errors, setErrors] = useState<RegisterErrorObject>({});
 
   function profilePictureHandler() {}
@@ -48,6 +49,16 @@ export default function EditProfilePage() {
       setErrors(e);
       return;
     }
+
+    mutate(
+      { id: user!._id, email, bio, fullname, password, profilePicture },
+      {
+        onSuccess() {
+          setTimeout(() => navigate("/auth/login"), 10000);
+        },
+        onError() {},
+      }
+    );
   }
 
   return (
@@ -111,7 +122,7 @@ export default function EditProfilePage() {
             >
               <Box
                 component={"img"}
-                src={SERVER_URL + user?.profilePicture}
+                src={SERVER_URL + profilePicture}
                 alt="profile image"
                 sx={{ objectFit: "contain", width: "100%", height: "100%" }}
               />

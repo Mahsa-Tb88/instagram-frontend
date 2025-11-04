@@ -74,10 +74,10 @@ export function useEditProfile() {
     mutationFn: (data: {
       id: string;
       email: string;
-      bio: string;
-      fullname: string;
+      bio: string | undefined;
+      fullname: string | undefined;
       password: string;
-      profilePicture: string;
+      profilePicture: string | undefined;
     }) => axios.post("/users/" + data.id + "/profile", data),
   });
 }
