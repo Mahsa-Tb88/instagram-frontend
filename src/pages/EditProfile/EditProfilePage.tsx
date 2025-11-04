@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import LoadingError from "../../components/LoadingError";
 import SkeletonEditProfile from "./SkeletonEditProfile";
 import { MdClose, MdHome, MdUpload } from "react-icons/md";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import type { RegisterErrorObject } from "../../types/types";
 import { useEditProfile } from "../../http/mutation";
 import noImage from "../../assets/images/no-image.jpg";
@@ -15,7 +15,6 @@ export default function EditProfilePage() {
   const { data, isFetching, error, refetch } = useGetProfile(params.username!);
   const { mutate, isPending } = useEditProfile();
   const user = data?.data?.body;
-  console.log("user...", user);
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [bio, setBio] = useState(user?.bio);
@@ -23,6 +22,15 @@ export default function EditProfilePage() {
   const [profilePicture, setProfilePicture] = useState(user?.profilePicture);
   const [fullname, setFullName] = useState(user?.fullname);
   const [errors, setErrors] = useState<RegisterErrorObject>({});
+
+  useEffect(() => {
+    if (user) {
+      setBio(user.bio);
+      setFullName(user.fullname);
+      setProfilePicture(user.profilePicture);
+      setEmail(user.email);
+    }
+  }, [user]);
 
   function profilePictureHandler() {
     if (profilePicture) {
