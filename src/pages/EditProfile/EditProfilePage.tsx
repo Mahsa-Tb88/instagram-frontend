@@ -32,10 +32,20 @@ export default function EditProfilePage() {
     }
   }, [user]);
 
-  function profilePictureHandler() {
+  function removeProfilePicHandler() {
     if (profilePicture) {
       setProfilePicture("");
+      return;
+    }
+  }
+
+  function uploadProfilePicHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setProfilePicture(imageUrl);
     } else {
+      console.log("No file selected");
     }
   }
 
@@ -137,7 +147,13 @@ export default function EditProfilePage() {
             >
               <Box
                 component={"img"}
-                src={profilePicture ? SERVER_URL + profilePicture : noImage}
+                src={
+                  profilePicture
+                    ? profilePicture.startsWith("blob:")
+                      ? profilePicture // local preview
+                      : SERVER_URL + profilePicture // existing image from server
+                    : noImage
+                }
                 alt="profile image"
                 sx={{ objectFit: "contain", width: "100%", height: "100%" }}
               />
@@ -155,7 +171,7 @@ export default function EditProfilePage() {
                     bgcolor: profilePicture ? "rgba(255, 0, 0, 0.8)" : "rgba(13, 197, 56, 0.6)",
                   },
                 }}
-                onClick={profilePictureHandler}
+                onClick={removeProfilePicHandler}
               >
                 {profilePicture ? <MdClose /> : <MdUpload />}
               </IconButton>
@@ -166,6 +182,7 @@ export default function EditProfilePage() {
                   sx={{
                     display: "none",
                   }}
+                  onChange={uploadProfilePicHandler}
                 />
               )}
             </Stack>
