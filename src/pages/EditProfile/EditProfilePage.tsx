@@ -35,6 +35,7 @@ export default function EditProfilePage() {
   function profilePictureHandler() {
     if (profilePicture) {
       setProfilePicture("");
+    } else {
     }
   }
 
@@ -141,6 +142,8 @@ export default function EditProfilePage() {
                 sx={{ objectFit: "contain", width: "100%", height: "100%" }}
               />
               <IconButton
+                component={profilePicture ? "button" : "label"} // label connects to file input
+                htmlFor={profilePicture ? undefined : "upload-input"}
                 sx={{
                   position: "absolute",
                   top: "50%",
@@ -156,6 +159,15 @@ export default function EditProfilePage() {
               >
                 {profilePicture ? <MdClose /> : <MdUpload />}
               </IconButton>
+              {!profilePicture && (
+                <TextField
+                  id="upload-input"
+                  type="file"
+                  sx={{
+                    display: "none",
+                  }}
+                />
+              )}
             </Stack>
           </Stack>
 
