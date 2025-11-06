@@ -81,3 +81,9 @@ export function useEditProfile() {
     }) => axios.put("/users/" + data.id + "/profile", data),
   });
 }
+
+export function useUploadFile() {
+  return useMutation({
+    mutationFn: (formData) => axios.post("/misc/upload", formData),
+  });
+}

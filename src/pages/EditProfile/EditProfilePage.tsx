@@ -32,6 +32,8 @@ export default function EditProfilePage() {
     }
   }, [user]);
 
+  console.log("proflepicture", profilePicture);
+
   function removeProfilePicHandler() {
     if (profilePicture) {
       setProfilePicture("");
@@ -50,7 +52,6 @@ export default function EditProfilePage() {
   }
 
   function handleSubmit(event: FormEvent) {
-    console.log("yees");
     event.preventDefault();
     setErrors({});
     const e: RegisterErrorObject = {};
@@ -80,7 +81,7 @@ export default function EditProfilePage() {
       { id: user!._id, email, bio, fullname, password, profilePicture },
       {
         onSuccess() {
-          setTimeout(() => navigate("/auth/login"), 10000);
+          setTimeout(() => navigate("/auth/login"), 1000);
         },
         onError(e) {
           console.log("eroor is", e);
