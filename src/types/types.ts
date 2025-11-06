@@ -11,6 +11,7 @@ export type RegisterErrorObject = {
   email?: string;
   confirm?: string;
   fullname?: string;
+  bio?: string;
 };
 
 export type RegisterObject = {

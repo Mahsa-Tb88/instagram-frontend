@@ -78,6 +78,6 @@ export function useEditProfile() {
       fullname: string | undefined;
       password: string;
       profilePicture: string | undefined;
-    }) => axios.post("/users/" + data.id + "/profile", data),
+    }) => axios.put("/users/" + data.id + "/profile", data),
   });
 }

@@ -50,6 +50,7 @@ export default function EditProfilePage() {
   }
 
   function handleSubmit(event: FormEvent) {
+    console.log("yees");
     event.preventDefault();
     setErrors({});
     const e: RegisterErrorObject = {};
@@ -64,7 +65,7 @@ export default function EditProfilePage() {
       e.email = "Please enter a valid email address";
     }
     if (bio?.length && bio.length > 100) {
-      e.password = "Bio must not exceed 100 characters";
+      e.bio = "Bio must not exceed 100 characters";
     }
     if (fullname?.length && fullname!.length < 2) {
       e.fullname = "Fullname must be at least 2 characters long";
@@ -81,7 +82,9 @@ export default function EditProfilePage() {
         onSuccess() {
           setTimeout(() => navigate("/auth/login"), 10000);
         },
-        onError() {},
+        onError(e) {
+          console.log("eroor is", e);
+        },
       }
     );
   }
@@ -106,7 +109,7 @@ export default function EditProfilePage() {
           actionIcon={error.status === 404 && <MdHome />}
         />
       ) : (
-        <Stack maxWidth={"60%"} gap={3} onSubmit={handleSubmit}>
+        <Stack maxWidth={"60%"} gap={3} onSubmit={handleSubmit} component="form">
           <Typography component="h3" variant="h3" mb={1}>
             Edit Profile
           </Typography>
@@ -116,18 +119,30 @@ export default function EditProfilePage() {
               value={fullname}
               label="Fullname"
               onChange={(e) => setFullName(e.target.value)}
+              error={!!errors.fullname}
+              helperText={errors.fullname}
             />
-            <TextField value={bio} label="Bio" onChange={(e) => setBio(e.target.value)} />
+            <TextField
+              value={bio}
+              label="Bio"
+              onChange={(e) => setBio(e.target.value)}
+              error={!!errors.bio}
+              helperText={errors.bio}
+            />
             <TextField value={email} label="Email" onChange={(e) => setEmail(e.target.value)} />
             <TextField
               label="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              error={!!errors.password}
+              helperText={errors.password}
             />
             <TextField
               label="Confirm Password"
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
+              error={!!errors.confirm}
+              helperText={errors.confirm}
             />
           </Stack>
           <Stack flexDirection={"row"} alignItems={"center"}>
@@ -188,7 +203,7 @@ export default function EditProfilePage() {
             </Stack>
           </Stack>
 
-          <Button type="submit" disabled={isPending} size="large">
+          <Button type="submit" size="large" disableElevation disabled={isPending}>
             Save Changes
           </Button>
         </Stack>
