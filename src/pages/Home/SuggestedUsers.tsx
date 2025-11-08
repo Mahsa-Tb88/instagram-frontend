@@ -11,7 +11,7 @@ export default function SuggestedUsers() {
 
   const followMutation = useFollowUser();
   const logoutMutation = useLogout();
-  console.log(suggestedUsers);
+  
   function handleFollow(id: string) {
     followMutation.mutate(id, {
       onSuccess() {

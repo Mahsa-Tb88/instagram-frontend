@@ -7,8 +7,9 @@ import SkeletonEditProfile from "./SkeletonEditProfile";
 import { MdClose, MdHome, MdUpload } from "react-icons/md";
 import { useEffect, useState, type FormEvent } from "react";
 import type { RegisterErrorObject } from "../../types/types";
-import { useEditProfile, useUploadFile } from "../../http/mutation";
+import { useEditProfile, useLogout, useUploadFile } from "../../http/mutation";
 import noImage from "../../assets/images/no-image.jpg";
+import { useUserStore } from "../../store/store";
 
 export default function EditProfilePage() {
   const params = useParams<{ username: string }>();
@@ -16,6 +17,9 @@ export default function EditProfilePage() {
   const { data, isFetching, error, refetch } = useGetProfile(params.username!);
   const uploadFile = useUploadFile();
   const { mutate, isPending } = useEditProfile();
+  const logoutMutation = useLogout();
+  const logout = useUserStore((state) => state.logout);
+
   const user = data?.data?.body;
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -90,7 +94,13 @@ export default function EditProfilePage() {
             { id: user!._id, email, bio, fullname, password, profilePicture: updatedPhoto },
             {
               onSuccess() {
-                // setTimeout(() => navigate("/auth/login"), 1000);
+                setTimeout(() => {
+                  logoutMutation.mutate(undefined, {
+                    onSuccess() {
+                      logout();
+                    },
+                  });
+                }, 1000);
               },
               onError(error) {
                 e.message = error.message;
@@ -104,6 +114,24 @@ export default function EditProfilePage() {
           return;
         },
       });
+    } else {
+      mutate(
+        { id: user!._id, email, bio, fullname, password, profilePicture },
+        {
+          onSuccess() {
+            setTimeout(() => {
+              logoutMutation.mutate(undefined, {
+                onSuccess() {
+                  logout();
+                },
+              });
+            }, 1000);
+          },
+          onError(error) {
+            e.message = error.message;
+          },
+        }
+      );
     }
   }
 
