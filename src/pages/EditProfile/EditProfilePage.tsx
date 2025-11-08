@@ -16,7 +16,7 @@ export default function EditProfilePage() {
   const navigate = useNavigate();
   const { data, isFetching, error, refetch } = useGetProfile(params.username!);
   const uploadFile = useUploadFile();
-  const { mutate, isPending } = useEditProfile();
+  const { mutateAsync, mutate, isPending } = useEditProfile();
   const logoutMutation = useLogout();
   const logout = useUserStore((state) => state.logout);
 
@@ -57,7 +57,7 @@ export default function EditProfilePage() {
     }
   }
 
-  function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     setErrors({});
     const e: RegisterErrorObject = {};
@@ -133,6 +133,25 @@ export default function EditProfilePage() {
         }
       );
     }
+
+    //second way
+    // try {
+    //   const form = new FormData();
+    //   let updatedPhoto = "";
+    //   if (profilePicChanges instanceof File) {
+    //     form.append("file", profilePicChanges);
+    //     const uploadResponse = await uploadFile.mutateAsync(form as any);
+    //     updatedPhoto = uploadResponse.data.body.url;
+    //   }
+    //   await mutateAsync({
+    //     id: user!._id,
+    //     email,
+    //     bio,
+    //     fullname,
+    //     password,
+    //     profilePicture: updatedPhoto,
+    //   });
+    // } catch (error) {}
   }
 
   return (
