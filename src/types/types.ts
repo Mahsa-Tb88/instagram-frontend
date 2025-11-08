@@ -12,6 +12,7 @@ export type RegisterErrorObject = {
   confirm?: string;
   fullname?: string;
   bio?: string;
+  message?: string;
 };
 
 export type RegisterObject = {

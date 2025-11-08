@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Button, IconButton, Stack, TextField, Typography } from "@mui/material";
 import { useGetProfile } from "../../http/queries";
 import { useNavigate, useParams } from "react-router";
@@ -6,13 +7,14 @@ import SkeletonEditProfile from "./SkeletonEditProfile";
 import { MdClose, MdHome, MdUpload } from "react-icons/md";
 import { useEffect, useState, type FormEvent } from "react";
 import type { RegisterErrorObject } from "../../types/types";
-import { useEditProfile } from "../../http/mutation";
+import { useEditProfile, useUploadFile } from "../../http/mutation";
 import noImage from "../../assets/images/no-image.jpg";
 
 export default function EditProfilePage() {
   const params = useParams<{ username: string }>();
   const navigate = useNavigate();
   const { data, isFetching, error, refetch } = useGetProfile(params.username!);
+  const uploadFile = useUploadFile();
   const { mutate, isPending } = useEditProfile();
   const user = data?.data?.body;
   const [password, setPassword] = useState("");
@@ -20,6 +22,7 @@ export default function EditProfilePage() {
   const [bio, setBio] = useState(user?.bio);
   const [email, setEmail] = useState(user?.email);
   const [profilePicture, setProfilePicture] = useState(user?.profilePicture);
+  const [profilePicChanges, setProfilePicCahnges] = useState({});
   const [fullname, setFullName] = useState(user?.fullname);
   const [errors, setErrors] = useState<RegisterErrorObject>({});
 
@@ -32,8 +35,6 @@ export default function EditProfilePage() {
     }
   }, [user]);
 
-  console.log("proflepicture", profilePicture);
-
   function removeProfilePicHandler() {
     if (profilePicture) {
       setProfilePicture("");
@@ -44,6 +45,7 @@ export default function EditProfilePage() {
   function uploadProfilePicHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (file) {
+      setProfilePicCahnges(file);
       const imageUrl = URL.createObjectURL(file);
       setProfilePicture(imageUrl);
     } else {
@@ -77,17 +79,32 @@ export default function EditProfilePage() {
       return;
     }
 
-    mutate(
-      { id: user!._id, email, bio, fullname, password, profilePicture },
-      {
-        onSuccess() {
-          setTimeout(() => navigate("/auth/login"), 1000);
+    const form = new FormData();
+    let updatedPhoto = "";
+    if (profilePicChanges instanceof File) {
+      form.append("file", profilePicChanges);
+      uploadFile.mutate(form as any, {
+        onSuccess(d) {
+          updatedPhoto = d.data.body.url;
+          mutate(
+            { id: user!._id, email, bio, fullname, password, profilePicture: updatedPhoto },
+            {
+              onSuccess() {
+                // setTimeout(() => navigate("/auth/login"), 1000);
+              },
+              onError(error) {
+                e.message = error.message;
+              },
+            }
+          );
         },
-        onError(e) {
-          console.log("eroor is", e);
+        onError(error) {
+          e.message = error.message;
+          setErrors(e);
+          return;
         },
-      }
-    );
+      });
+    }
   }
 
   return (
