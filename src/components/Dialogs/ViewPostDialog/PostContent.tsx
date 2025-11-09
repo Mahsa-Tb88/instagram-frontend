@@ -1,20 +1,12 @@
-import {
-  Avatar,
-  Button,
-  Container,
-  Grid,
-  IconButton,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Avatar, Button, Container, Grid, Stack, TextField, Typography } from "@mui/material";
 import { useRef, useState } from "react";
 import { useUserStore } from "../../../store/store";
-import type { Comment, Post } from "../../../types/types";
+import type { Post, Comment } from "../../../types/types";
 import { useInsertComment } from "../../../http/mutation";
 import { useNavigate } from "react-router";
-import { MdDelete, MdEdit, MdSend } from "react-icons/md";
+import { MdSend } from "react-icons/md";
 import { toast } from "react-toastify";
+import UserComment from "./UserComment";
 
 type PostContentProps = {
   post: Post;
@@ -26,6 +18,7 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
   const profilePicture = useUserStore((state) => state.profilePicture);
   const [text, setText] = useState("");
   const [newComments, setNewComments] = useState<Comment[]>([]);
+
   const commentMutation = useInsertComment();
   const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -68,9 +61,6 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
     );
   }
 
-  function deleteComment(){}
-
-  function editComment() {}
   return (
     <Container disableGutters>
       <Grid container spacing={3} my={5}>
@@ -110,47 +100,7 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
             </Typography>
             <Stack sx={{ bgcolor: "light.main", p: 1, borderRadius: 1, mb: 3 }}>
               {allComments.map((c) => (
-                <Stack mb={1} sx={{ bgcolor: "light.dark", p: 1, borderRadius: 1 }}>
-                  <Stack direction={"row"} gap={1} alignItems={"center"}>
-                    <Avatar
-                      src={SERVER_URL + c.user.profilePicture}
-                      sx={{ width: "30px", height: "30px", cursor: "pointer" }}
-                      onClick={() => handleGotoProfile(c.user.username)}
-                    />
-                    <Stack>
-                      <Typography
-                        fontWeight={600}
-                        fontSize={14}
-                        onClick={() => handleGotoProfile(c.user.username)}
-                        sx={{ cursor: "pointer" }}
-                      >
-                        {c.user.username.slice(0, 1) + c.user.username.slice(1)}
-                      </Typography>
-                      <Typography color="text.secondary" fontSize={10}>
-                        {c._id.slice(0, 10)}
-                      </Typography>
-                    </Stack>
-
-                    <Stack ml="auto" direction="row" justifyContent="end" alignItems="center">
-                      {(username == post.user.username || username == c.user.username) && (
-                        <IconButton sx={{ m: 0, p: "5px" }} color="error" onClick={deleteComment}>
-                          <MdDelete size={14} />
-                        </IconButton>
-                      )}
-                      {username == c.user.username && (
-                        <IconButton sx={{ m: 0, p: "5px" }} color="info" onClick={editComment}>
-                          <MdEdit size={14} />
-                        </IconButton>
-                      )}
-                    </Stack>
-                  </Stack>
-                  <Typography
-                    sx={{ whiteSpace: "pre-line", overflowWrap: "anywhere", lineHeight: 1.8 }}
-                    fontSize={14}
-                  >
-                    {c.text}
-                  </Typography>
-                </Stack>
+                <UserComment post={post} key={c._id} c={c} handleGotoProfile={handleGotoProfile} />
               ))}
               <div ref={ref} />
             </Stack>
