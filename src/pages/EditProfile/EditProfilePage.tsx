@@ -10,6 +10,7 @@ import type { RegisterErrorObject } from "../../types/types";
 import { useEditProfile, useLogout, useUploadFile } from "../../http/mutation";
 import noImage from "../../assets/images/no-image.jpg";
 import { useUserStore } from "../../store/store";
+import { toast } from "react-toastify";
 
 export default function EditProfilePage() {
   const params = useParams<{ username: string }>();
@@ -52,8 +53,6 @@ export default function EditProfilePage() {
       setProfilePicCahnges(file);
       const imageUrl = URL.createObjectURL(file);
       setProfilePicture(imageUrl);
-    } else {
-      console.log("No file selected");
     }
   }
 
@@ -84,39 +83,26 @@ export default function EditProfilePage() {
     }
 
     const form = new FormData();
-    let updatedPhoto = "";
+    let updatedPhoto = profilePicture;
     if (profilePicChanges instanceof File) {
       form.append("file", profilePicChanges);
       uploadFile.mutate(form as any, {
         onSuccess(d) {
           updatedPhoto = d.data.body.url;
-          mutate(
-            { id: user!._id, email, bio, fullname, password, profilePicture: updatedPhoto },
-            {
-              onSuccess() {
-                setTimeout(() => {
-                  logoutMutation.mutate(undefined, {
-                    onSuccess() {
-                      logout();
-                    },
-                  });
-                }, 1000);
-              },
-              onError(error) {
-                e.message = error.message;
-              },
-            }
-          );
+          handleUpdateProfile(updatedPhoto!);
         },
         onError(error) {
-          e.message = error.message;
-          setErrors(e);
+          toast.error(error.message);
           return;
         },
       });
     } else {
+      handleUpdateProfile(profilePicture!);
+    }
+
+    function handleUpdateProfile(updatedPhoto: string) {
       mutate(
-        { id: user!._id, email, bio, fullname, password, profilePicture },
+        { id: user!._id, email, bio, fullname, password, profilePicture: updatedPhoto },
         {
           onSuccess() {
             setTimeout(() => {
@@ -128,7 +114,7 @@ export default function EditProfilePage() {
             }, 1000);
           },
           onError(error) {
-            e.message = error.message;
+            toast.error(error.message);
           },
         }
       );
