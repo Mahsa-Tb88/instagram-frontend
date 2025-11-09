@@ -68,6 +68,9 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
     );
   }
 
+  function deleteComment(){}
+
+  function editComment() {}
   return (
     <Container disableGutters>
       <Grid container spacing={3} my={5}>
@@ -129,12 +132,16 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
                     </Stack>
 
                     <Stack ml="auto" direction="row" justifyContent="end" alignItems="center">
-                      <IconButton sx={{ m: 0, p: "5px" }} color="error">
-                        <MdDelete size={14} />
-                      </IconButton>
-                      <IconButton sx={{ m: 0, p: "5px" }} color="info">
-                        <MdEdit size={14} />
-                      </IconButton>
+                      {(username == post.user.username || username == c.user.username) && (
+                        <IconButton sx={{ m: 0, p: "5px" }} color="error" onClick={deleteComment}>
+                          <MdDelete size={14} />
+                        </IconButton>
+                      )}
+                      {username == c.user.username && (
+                        <IconButton sx={{ m: 0, p: "5px" }} color="info" onClick={editComment}>
+                          <MdEdit size={14} />
+                        </IconButton>
+                      )}
                     </Stack>
                   </Stack>
                   <Typography
