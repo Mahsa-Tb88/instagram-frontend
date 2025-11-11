@@ -1,4 +1,4 @@
-import { Avatar, IconButton, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Button, IconButton, Stack, TextField, Typography } from "@mui/material";
 import React, { useState, type ChangeEvent } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import type { Comment, Post } from "../../../types/types";
@@ -16,8 +16,9 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
 
   function deleteComment(id: string) {}
 
-  function editComment(id: string) {
+  function editComment(text: string) {
     setIsEditComment(true);
+    setUpdatedComment(text);
   }
   return (
     <Stack mb={1} sx={{ bgcolor: "light.dark", p: 1, borderRadius: 1 }}>
@@ -42,13 +43,13 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
         </Stack>
 
         <Stack ml="auto" direction="row" justifyContent="end" alignItems="center">
-          {(username == post.user.username || username == c.user.username) && (
+          {(username == post.user.username || username == c.user.username) && !isEditComment && (
             <IconButton sx={{ m: 0, p: "5px" }} color="error" onClick={() => deleteComment(c._id)}>
               <MdDelete size={14} />
             </IconButton>
           )}
-          {username == c.user.username && (
-            <IconButton sx={{ m: 0, p: "5px" }} color="info" onClick={() => setIsEditComment(true)}>
+          {username == c.user.username && !isEditComment && (
+            <IconButton sx={{ m: 0, p: "5px" }} color="info" onClick={() => editComment(c.text)}>
               <MdEdit size={14} />
             </IconButton>
           )}
@@ -56,13 +57,18 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
       </Stack>
 
       {isEditComment ? (
-        <TextField
-          value={updatedComment}
-          onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-            setUpdatedComment(e.target.value)
-          }
-          fullWidth
-        />
+        <Stack spacing={1}>
+          <TextField
+            value={updatedComment}
+            onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+              setUpdatedComment(e.target.value)
+            }
+            fullWidth
+          />
+          <Button size="small" sx={{ maxWidth: "20%" }}>
+            Save
+          </Button>
+        </Stack>
       ) : (
         <Typography
           sx={{ whiteSpace: "pre-line", overflowWrap: "anywhere", lineHeight: 1.8 }}
