@@ -57,6 +57,13 @@ export function useInsertComment() {
   });
 }
 
+export function useEditCommentPost() {
+  return useMutation({
+    mutationFn: (data: { id: string; text: string }) =>
+      axios.put("/posts/" + data.id + "/comment", data, { timeout: 3000 }),
+  });
+}
+
 export function useEditPost() {
   return useMutation({
     mutationFn: (data: { id: string; caption: string }) =>

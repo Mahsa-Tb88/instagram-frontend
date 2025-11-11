@@ -20,6 +20,10 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
     setIsEditComment(true);
     setUpdatedComment(text);
   }
+
+  function saveHandler(){
+    
+  }
   return (
     <Stack mb={1} sx={{ bgcolor: "light.dark", p: 1, borderRadius: 1 }}>
       <Stack direction={"row"} gap={1} alignItems={"center"}>
@@ -65,7 +69,7 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
             }
             fullWidth
           />
-          <Button size="small" sx={{ maxWidth: "20%" }}>
+          <Button size="small" sx={{ maxWidth: "20%" }} onClick={saveHandler}>
             Save
           </Button>
         </Stack>
