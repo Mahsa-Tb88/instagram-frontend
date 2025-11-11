@@ -1,5 +1,5 @@
 import { Avatar, Button, IconButton, Stack, TextField, Typography } from "@mui/material";
-import React, { useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import type { Comment, Post } from "../../../types/types";
 import { useUserStore } from "../../../store/store";
@@ -15,27 +15,25 @@ type CommentProps = {
 export default function UserComment({ c, post, handleGotoProfile }: CommentProps) {
   const username = useUserStore((state) => state.username);
   const [isEditComment, setIsEditComment] = useState(false);
-  const [updatedComment, setUpdatedComment] = useState("");
+  const [comment, setComment] = useState(c.text);
+  const [previousComment, setPreviousComment] = useState(c.text);
 
   const useEditComment = useEditCommentPost();
-  const client = useQueryClient();
+  // const client = useQueryClient();
 
   function deleteComment(id: string) {}
 
-  function editComment(text: string) {
-    setIsEditComment(true);
-    setUpdatedComment(text);
-  }
-
   function saveHandler() {
-    const data = { id: c._id, text: updatedComment, postId: post._id };
+    setIsEditComment(false);
+    const data = { id: c._id, text: comment, postId: post._id };
     useEditComment.mutate(data, {
       onSuccess() {
-        setIsEditComment(false);
-        client.invalidateQueries({ queryKey: ["post", post._id] });
+        // client.invalidateQueries({ queryKey: ["post", post._id] });
+        setPreviousComment(comment);
       },
       onError(e) {
         toast.error(e.message);
+        setComment(previousComment);
       },
     });
   }
@@ -69,7 +67,7 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
             </IconButton>
           )}
           {username == c.user.username && !isEditComment && (
-            <IconButton sx={{ m: 0, p: "5px" }} color="info" onClick={() => editComment(c.text)}>
+            <IconButton sx={{ m: 0, p: "5px" }} color="info" onClick={() => setIsEditComment(true)}>
               <MdEdit size={14} />
             </IconButton>
           )}
@@ -79,9 +77,9 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
       {isEditComment ? (
         <Stack spacing={1}>
           <TextField
-            value={updatedComment}
+            value={comment}
             onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-              setUpdatedComment(e.target.value)
+              setComment(e.target.value)
             }
             fullWidth
           />
@@ -94,7 +92,7 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
           sx={{ whiteSpace: "pre-line", overflowWrap: "anywhere", lineHeight: 1.8 }}
           fontSize={14}
         >
-          {c.text}
+          {comment}
         </Typography>
       )}
     </Stack>
