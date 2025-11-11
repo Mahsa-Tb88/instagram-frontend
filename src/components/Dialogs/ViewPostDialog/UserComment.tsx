@@ -3,6 +3,9 @@ import React, { useState, type ChangeEvent } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import type { Comment, Post } from "../../../types/types";
 import { useUserStore } from "../../../store/store";
+import { useEditCommentPost } from "../../../http/mutation";
+import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
 
 type CommentProps = {
   c: Comment;
@@ -14,6 +17,9 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
   const [isEditComment, setIsEditComment] = useState(false);
   const [updatedComment, setUpdatedComment] = useState("");
 
+  const useEditComment = useEditCommentPost();
+  const client = useQueryClient();
+
   function deleteComment(id: string) {}
 
   function editComment(text: string) {
@@ -21,9 +27,19 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
     setUpdatedComment(text);
   }
 
-  function saveHandler(){
-    
+  function saveHandler() {
+    const data = { id: c._id, text: updatedComment, postId: post._id };
+    useEditComment.mutate(data, {
+      onSuccess() {
+        setIsEditComment(false);
+        client.invalidateQueries({ queryKey: ["post", post._id] });
+      },
+      onError(e) {
+        toast.error(e.message);
+      },
+    });
   }
+
   return (
     <Stack mb={1} sx={{ bgcolor: "light.dark", p: 1, borderRadius: 1 }}>
       <Stack direction={"row"} gap={1} alignItems={"center"}>
