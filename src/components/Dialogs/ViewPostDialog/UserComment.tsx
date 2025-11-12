@@ -3,7 +3,7 @@ import { useState, type ChangeEvent } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import type { Comment, Post } from "../../../types/types";
 import { useUserStore } from "../../../store/store";
-import { useEditCommentPost } from "../../../http/mutation";
+import { useDeleteCommentPost, useEditCommentPost } from "../../../http/mutation";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import { showConfirmDialog } from "../ConfirmDialog";
@@ -20,9 +20,29 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
   const [previousComment, setPreviousComment] = useState(c.text);
 
   const useEditComment = useEditCommentPost();
+  const useDeleteComment = useDeleteCommentPost();
   // const client = useQueryClient();
 
-  async function deleteComment(id: string) {}
+  async function deleteComment(id: string) {
+    const answer = await showConfirmDialog(
+      <p style={{ fontSize: 24 }}>Are you sure you want to delete this comment</p>,
+      "Yes",
+      "No"
+    );
+    const data = { id, postId: post._id };
+    if (answer) {
+      useDeleteComment.mutate(data, {
+        onSuccess() {
+          console.log("success");
+      
+        },
+        onError(e) {
+          console.log(e);
+          toast.error(e.message);
+        },
+      });
+    }
+  }
 
   function saveHandler() {
     setIsEditComment(false);
