@@ -6,6 +6,7 @@ import { useUserStore } from "../../../store/store";
 import { useEditCommentPost } from "../../../http/mutation";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
+import { showConfirmDialog } from "../ConfirmDialog";
 
 type CommentProps = {
   c: Comment;
@@ -21,7 +22,7 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
   const useEditComment = useEditCommentPost();
   // const client = useQueryClient();
 
-  function deleteComment(id: string) {}
+  async function deleteComment(id: string) {}
 
   function saveHandler() {
     setIsEditComment(false);

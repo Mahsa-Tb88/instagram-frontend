@@ -64,6 +64,13 @@ export function useEditCommentPost() {
   });
 }
 
+export function useDeleteCommentPost() {
+  return useMutation({
+    mutationFn: (data: { id: string; postId: string }) =>
+      axios.put("/posts/" + "/comment" + data.id, data, { timeout: 3000 }),
+  });
+}
+
 export function useEditPost() {
   return useMutation({
     mutationFn: (data: { id: string; caption: string }) =>
