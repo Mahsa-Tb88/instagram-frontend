@@ -6,7 +6,6 @@ import { useUserStore } from "../../../store/store";
 import { useDeleteCommentPost, useEditCommentPost } from "../../../http/mutation";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
-import { showConfirmDialog } from "../ConfirmDialog";
 
 type CommentProps = {
   c: Comment;
@@ -29,19 +28,20 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
     //   "Yes",
     //   "No"
     // );
+    if (confirm("Are you sure you want to delete this comment")) {
+      const data = { id, postId: post._id };
 
-    const data = { id, postId: post._id };
-
-    useDeleteComment.mutate(data, {
-      onSuccess() {
-        console.log("success");
-        client.invalidateQueries({ queryKey: ["post", post._id] });
-      },
-      onError(e) {
-        console.log(e);
-        toast.error(e.message);
-      },
-    });
+      useDeleteComment.mutate(data, {
+        onSuccess() {
+          console.log("success");
+          client.invalidateQueries({ queryKey: ["post", post._id] });
+        },
+        onError(e) {
+          console.log(e);
+          toast.error(e.message);
+        },
+      });
+    }
   }
 
   function saveHandler() {
