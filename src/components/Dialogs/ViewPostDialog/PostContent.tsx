@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import { MdSend } from "react-icons/md";
 import { toast } from "react-toastify";
 import UserComment from "./UserComment";
+import { Comment } from "html-react-parser";
 
 type PostContentProps = {
   post: Post;
@@ -17,13 +18,16 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
   const username = useUserStore((state) => state.username);
   const profilePicture = useUserStore((state) => state.profilePicture);
   const [text, setText] = useState("");
-  const [newComments, setNewComments] = useState<Comment[]>([]);
+  const [listComment, setListComment] = useState<Comment[]>(post.comments);
+
+  // const [newComments, setNewComments] = useState<Comment[]>([]);
+  // const [listComment, setListComment] = useState<Comment[]>([...post.comments, ...newComments]);
 
   const commentMutation = useInsertComment();
   const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const allComments = [...post.comments, ...newComments];
+  // const allComments = [...post.comments, ...newComments];
 
   function handleGotoProfile(username: string) {
     hideDialog();
@@ -37,15 +41,23 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
       toast.error("Comment must not exceed 300 characters");
       return;
     }
-
-    setNewComments([
-      ...newComments,
+    setListComment([
+      ...listComment,
       {
         _id: Math.random().toString(),
         text,
         user: { _id: "", username, fullname: "", profilePicture },
       },
     ]);
+
+    // setNewComments([
+    //   ...newComments,
+    //   {
+    //     _id: Math.random().toString(),
+    //     text,
+    //     user: { _id: "", username, fullname: "", profilePicture },
+    //   },
+    // ]);
     setTimeout(() => ref.current!.scrollIntoView({ behavior: "smooth" }), 50);
     commentMutation.mutate(
       { text, id: post._id },
@@ -54,7 +66,7 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
           setText("");
         },
         onError(e) {
-          setNewComments((c) => c.slice(0, c.length - 1));
+          setListComment((c) => c.slice(0, c.length - 1));
           toast.error(e.message);
         },
       }
@@ -99,8 +111,15 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
               Comments
             </Typography>
             <Stack sx={{ bgcolor: "light.main", p: 1, borderRadius: 1, mb: 3 }}>
-              {allComments.map((c) => (
-                <UserComment post={post} key={c._id} c={c} handleGotoProfile={handleGotoProfile} />
+              {listComment.map((c) => (
+                <UserComment
+                  setListComment={setListComment}
+                  listComment={listComment}
+                  post={post}
+                  key={c._id}
+                  c={c}
+                  handleGotoProfile={handleGotoProfile}
+                />
               ))}
               <div ref={ref} />
             </Stack>

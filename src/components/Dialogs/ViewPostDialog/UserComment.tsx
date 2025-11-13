@@ -10,9 +10,17 @@ import { useQueryClient } from "@tanstack/react-query";
 type CommentProps = {
   c: Comment;
   post: Post;
+  setListComment: React.Dispatch<React.SetStateAction<Comment[]>>;
+  listComment: Comment[];
   handleGotoProfile: (username: string) => void;
 };
-export default function UserComment({ c, post, handleGotoProfile }: CommentProps) {
+export default function UserComment({
+  c,
+  post,
+  handleGotoProfile,
+  setListComment,
+  listComment,
+}: CommentProps) {
   const username = useUserStore((state) => state.username);
   const [isEditComment, setIsEditComment] = useState(false);
   const [comment, setComment] = useState(c.text);
@@ -30,14 +38,16 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
     // );
     if (confirm("Are you sure you want to delete this comment")) {
       const data = { id, postId: post._id };
-
+      const updatedList = listComment.filter((l) => l._id !== id);
+      setListComment(updatedList);
       useDeleteComment.mutate(data, {
         onSuccess() {
           console.log("success");
-          client.invalidateQueries({ queryKey: ["post", post._id] });
+          // client.invalidateQueries({ queryKey: ["post", post._id] });
         },
         onError(e) {
           console.log(e);
+          setListComment((c) => c.slice(0, c.length - 1));
           toast.error(e.message);
         },
       });
