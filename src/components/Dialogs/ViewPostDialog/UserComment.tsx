@@ -21,27 +21,27 @@ export default function UserComment({ c, post, handleGotoProfile }: CommentProps
 
   const useEditComment = useEditCommentPost();
   const useDeleteComment = useDeleteCommentPost();
-  // const client = useQueryClient();
+  const client = useQueryClient();
 
-  async function deleteComment(id: string) {
-    const answer = await showConfirmDialog(
-      <p style={{ fontSize: 24 }}>Are you sure you want to delete this comment</p>,
-      "Yes",
-      "No"
-    );
+  function deleteComment(id: string) {
+    // const answer = await showConfirmDialog(
+    //   <p style={{ fontSize: 24 }}>Are you sure you want to delete this comment</p>,
+    //   "Yes",
+    //   "No"
+    // );
+
     const data = { id, postId: post._id };
-    if (answer) {
-      useDeleteComment.mutate(data, {
-        onSuccess() {
-          console.log("success");
-      
-        },
-        onError(e) {
-          console.log(e);
-          toast.error(e.message);
-        },
-      });
-    }
+
+    useDeleteComment.mutate(data, {
+      onSuccess() {
+        console.log("success");
+        client.invalidateQueries({ queryKey: ["post", post._id] });
+      },
+      onError(e) {
+        console.log(e);
+        toast.error(e.message);
+      },
+    });
   }
 
   function saveHandler() {
