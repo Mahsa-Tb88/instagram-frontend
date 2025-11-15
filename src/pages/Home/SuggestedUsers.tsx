@@ -11,7 +11,7 @@ export default function SuggestedUsers() {
 
   const followMutation = useFollowUser();
   const logoutMutation = useLogout();
-  
+
   function handleFollow(id: string) {
     followMutation.mutate(id, {
       onSuccess() {
@@ -66,15 +66,15 @@ export default function SuggestedUsers() {
         <Stack spacing={3}>
           {suggestedUsers.length > 0 ? (
             suggestedUsers.slice(0, 5).map((u) => (
-              <Stack direction={"row"} spacing={2}>
+              <Stack direction={"row"}>
                 <Avatar
                   src={SERVER_URL + u.profilePicture}
                   component={Link}
                   to={"/user/" + u.username}
                   alt={u.fullname}
-                  sx={{ height: 50, width: 50 }}
+                  sx={{ height: 50, width: 50, mr: 1 }}
                 />
-                <Stack mr={"auto"}>
+                <Stack>
                   <Typography
                     sx={{ textDecoration: "none", color: "text.primary" }}
                     fontWeight={"bold"}
@@ -83,12 +83,13 @@ export default function SuggestedUsers() {
                   >
                     {u.username.slice(0, 1).toUpperCase() + u.username.slice(1)}
                   </Typography>
-                  <Typography className="text.secondary">{fullname}</Typography>
+                  <Typography className="text.secondary">{u.fullname}</Typography>
                 </Stack>
                 <Button
                   variant="text"
                   onClick={() => handleFollow(u._id)}
                   disabled={followMutation.isPending}
+                  sx={{ ml: "auto" }}
                 >
                   Follow
                 </Button>
