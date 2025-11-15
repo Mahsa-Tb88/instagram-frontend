@@ -31,11 +31,13 @@ export function useUnlikePost() {
     mutationFn: (id: string) => axios.put("/posts/" + id + "/unlike", null, { timeout: 3000 }),
   });
 }
+
 export function useLikePost() {
   return useMutation({
     mutationFn: (id: string) => axios.put("/posts/" + id + "/like", null, { timeout: 3000 }),
   });
 }
+
 export function useFollowUser() {
   return useMutation({
     mutationFn: (targetId: string) =>
@@ -101,3 +103,5 @@ export function useUploadFile() {
     mutationFn: (formData) => axios.post("/misc/upload", formData),
   });
 }
+
+
