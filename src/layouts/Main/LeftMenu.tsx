@@ -44,7 +44,7 @@ export default function LeftMenu() {
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItemButton>
-        <ListItemButton>
+        <ListItemButton LinkComponent={Link} to={"/user/search"}>
           <ListItemIcon>
             <MdSearch />
           </ListItemIcon>
