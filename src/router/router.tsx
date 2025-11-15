@@ -8,6 +8,7 @@ import HomePage from "../pages/Home/HomePage";
 import ViewProfilePage from "../pages/ViewProfile/ViewProfilePage";
 import EditProfilePage from "../pages/EditProfile/EditProfilePage";
 import EditPost from "../pages/Post/EditPost";
+import UserSearch from "../pages/UserSearch/UserSearch";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
           { path: "user/:username", element: <ViewProfilePage /> },
           { path: "user/profile/edit/:username", element: <EditProfilePage /> },
           { path: "user/post/edit/:postId", element: <EditPost /> },
-          {path:"user/search"}
+          { path: "user/search", element: <UserSearch /> },
         ],
       },
     ],
