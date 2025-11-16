@@ -54,6 +54,13 @@ export default function UserSearch() {
                     alignItems: "center",
                     justifyContent: "space-between",
                     p: 1,
+                    width: "80%",
+                    mx: "auto",
+                    cursor: "pointer",
+                    borderRadius: "5px",
+                    "&:hover": {
+                      backgroundColor: "#f2f2f2",
+                    },
                   }}
                 >
                   <Stack
@@ -73,17 +80,19 @@ export default function UserSearch() {
                     <Stack>
                       <Typography
                         sx={{
-                          fontWeight: "bold",
-                          fontSize: 17,
+                          fontSize: 15,
+                          color: "text.primary",
                         }}
+                        fontWeight={"600"}
                       >
                         {user.username[0].toUpperCase() + user.username.slice(1)}
                       </Typography>
                       <Typography
                         sx={{
-                          fontWeight: "bold",
-                          fontSize: 17,
+                          fontSize: 15,
+                          color: "text.primary",
                         }}
+                        fontWeight={"600"}
                       >
                         {user.fullname[0].toUpperCase() + user.fullname.slice(1)}
                       </Typography>
