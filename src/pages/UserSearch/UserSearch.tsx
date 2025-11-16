@@ -13,6 +13,7 @@ export default function UserSearch() {
   const { isPending, isFetching, data, error, refetch } = useFindUser(q);
 
   console.log("data ", data?.data?.body?.users);
+
   useEffect(() => {
     const timeOut = setTimeout(() => {
       setQ(search);
@@ -63,21 +64,30 @@ export default function UserSearch() {
                       textDecoration: "none",
                     }}
                     component={Link}
-                    to={`profile/${user.username}`}
+                    to={`/user/${user.username}`}
                   >
-                 
                     <Avatar
                       src={SERVER_URL + user.profilePicture}
                       sx={{ width: "50px", height: "50px", cursor: "pointer" }}
                     />
-                    <Typography
-                      sx={{
-                        fontWeight: "bold",
-                        fontSize: 17,
-                      }}
-                    >
-                      {user.username[0].toUpperCase() + user.username.slice(1)}
-                    </Typography>
+                    <Stack>
+                      <Typography
+                        sx={{
+                          fontWeight: "bold",
+                          fontSize: 17,
+                        }}
+                      >
+                        {user.username[0].toUpperCase() + user.username.slice(1)}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontWeight: "bold",
+                          fontSize: 17,
+                        }}
+                      >
+                        {user.fullname[0].toUpperCase() + user.fullname.slice(1)}
+                      </Typography>
+                    </Stack>
                   </Stack>
                   <Box
                     sx={{
