@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useFindUser } from "../../http/queries";
-import { Paper, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Stack, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/material";
 import LoadingError from "../../components/LoadingError";
 import { Link } from "react-router";
@@ -12,6 +12,7 @@ export default function UserSearch() {
   const [userList, setUserList] = useState<User[]>([]);
   const { isPending, isFetching, data, error, refetch } = useFindUser(q);
 
+  console.log("data ", data?.data?.body?.users);
   useEffect(() => {
     const timeOut = setTimeout(() => {
       setQ(search);
@@ -20,15 +21,15 @@ export default function UserSearch() {
   }, [search]);
 
   useEffect(() => {
-    setUserList(data?.data?.body || []);
+    setUserList(data?.data?.body.users || []);
   }, [data]);
 
   return (
-    <Paper sx={{ p: 2 }}>
+    <Stack sx={{ p: 2, width: "100%" }}>
       <TextField
         label="Search user"
         variant="outlined"
-        sx={{ width: "100%" }}
+        sx={{ width: "80%", mx: "auto" }}
         onChange={(e) => setSearch(e.target.value)}
       />
       <Stack sx={{ mt: 2 }}>
@@ -45,7 +46,7 @@ export default function UserSearch() {
             {userList.map((user) => {
               return (
                 <Stack
-                  key={user.id}
+                  key={user.username}
                   sx={{
                     my: 1,
                     flexDirection: "row",
@@ -62,24 +63,17 @@ export default function UserSearch() {
                       textDecoration: "none",
                     }}
                     component={Link}
-                    to={`profile/${user.id}`}
+                    to={`profile/${user.username}`}
                   >
-                    <Box
-                      component="img"
-                      sx={{
-                        height: "50px",
-                        width: "50px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        display: "block",
-                      }}
-                      src={user.profileImg ? SERVER_URL + user.profileImg : noImage}
+                 
+                    <Avatar
+                      src={SERVER_URL + user.profilePicture}
+                      sx={{ width: "50px", height: "50px", cursor: "pointer" }}
                     />
                     <Typography
                       sx={{
                         fontWeight: "bold",
                         fontSize: 17,
-                        color: theme == "light" ? "grey.800" : "grey.200",
                       }}
                     >
                       {user.username[0].toUpperCase() + user.username.slice(1)}
@@ -103,6 +97,6 @@ export default function UserSearch() {
           ""
         )}
       </Stack>
-    </Paper>
+    </Stack>
   );
 }
