@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useFindUser } from "../../http/queries";
-import { Avatar, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/material";
 import LoadingError from "../../components/LoadingError";
 import { Link } from "react-router";
@@ -22,7 +22,9 @@ export default function UserSearch() {
   }, [search]);
 
   useEffect(() => {
-    setUserList(data?.data?.body.users || []);
+    if (data) {
+      setUserList(data?.data?.body.users);
+    }
   }, [data]);
 
   return (
@@ -98,14 +100,15 @@ export default function UserSearch() {
                       </Typography>
                     </Stack>
                   </Stack>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 1,
-                      alignItems: "center",
-                    }}
-                  ></Box>
+                  <Button sx={{ width: "120px" }}>
+                    {user.isFollowing && !user.isFollower
+                      ? "Follow back"
+                      : !user.isFollowing && user.isFollower
+                      ? "Unfollow"
+                      : !user.isFollowing && !user.isFollower
+                      ? "Follow"
+                      : "Unfollow"}
+                  </Button>
                 </Stack>
               );
             })}

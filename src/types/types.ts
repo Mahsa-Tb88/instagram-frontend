@@ -3,6 +3,8 @@ export type User = {
   username: string;
   fullname: string;
   profilePicture: string;
+  isFollowing?: boolean;
+  isFollower?: boolean;
 };
 
 export type RegisterErrorObject = {
