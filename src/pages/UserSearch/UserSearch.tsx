@@ -22,9 +22,7 @@ export default function UserSearch() {
   }, [search]);
 
   useEffect(() => {
-    if (data) {
-      setUserList(data?.data?.body.users);
-    }
+    setUserList(data?.data?.body.users || []);
   }, [data]);
 
   return (
