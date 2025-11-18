@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useFindUser } from "../../http/queries";
-import { Avatar, Stack, TextField, Typography } from "@mui/material";
+import { Stack, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/material";
 import LoadingError from "../../components/LoadingError";
-import { Link } from "react-router";
 import type { User } from "../../types/types";
-import ButtonFollowUnfollow from "./ButtonFollowUnfollow";
+import UserList from "./UserList";
 
 export default function UserSearch() {
   const [search, setSearch] = useState("");
@@ -45,65 +44,7 @@ export default function UserSearch() {
           </Box>
         ) : userList.length ? (
           <Stack>
-            {userList.map((user) => {
-              return (
-                <Stack
-                  key={user.username}
-                  sx={{
-                    my: 1,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    p: 1,
-                    width: "80%",
-                    mx: "auto",
-                    cursor: "pointer",
-                    borderRadius: "5px",
-                    "&:hover": {
-                      backgroundColor: "#f2f2f2",
-                    },
-                  }}
-                >
-                  <Stack
-                    sx={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      gap: 1,
-                      textDecoration: "none",
-                    }}
-                    component={Link}
-                    to={`/user/${user.username}`}
-                  >
-                    <Avatar
-                      src={SERVER_URL + user.profilePicture}
-                      sx={{ width: "50px", height: "50px", cursor: "pointer" }}
-                    />
-                    <Stack>
-                      <Typography
-                        sx={{
-                          fontSize: 15,
-                          color: "text.primary",
-                        }}
-                        fontWeight={"600"}
-                      >
-                        {user.username[0].toUpperCase() + user.username.slice(1)}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: 15,
-                          color: "text.primary",
-                        }}
-                        fontWeight={"600"}
-                      >
-                        {user.fullname[0].toUpperCase() + user.fullname.slice(1)}
-                      </Typography>
-                    </Stack>
-                  </Stack>
-
-                  <ButtonFollowUnfollow user={user} />
-                </Stack>
-              );
-            })}
+            <UserList userList={userList} />
           </Stack>
         ) : !userList.length && search && !isPending ? (
           <Typography>Nothing found!</Typography>
