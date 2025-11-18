@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useFindUser } from "../../http/queries";
-import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Stack, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/material";
 import LoadingError from "../../components/LoadingError";
 import { Link } from "react-router";
 import type { User } from "../../types/types";
+import ButtonFollowUnfollow from "./ButtonFollowUnfollow";
 
 export default function UserSearch() {
   const [search, setSearch] = useState("");
@@ -36,7 +37,7 @@ export default function UserSearch() {
       <Stack sx={{ mt: 2 }}>
         {isFetching ? (
           <Box>
-            <LoadingError message="Is Loading" />
+            <LoadingError message="Is loading" />
           </Box>
         ) : error ? (
           <Box>
@@ -98,15 +99,8 @@ export default function UserSearch() {
                       </Typography>
                     </Stack>
                   </Stack>
-                  <Button sx={{ width: "120px" }}>
-                    {user.isFollowing && !user.isFollower
-                      ? "Follow back"
-                      : !user.isFollowing && user.isFollower
-                      ? "Unfollow"
-                      : !user.isFollowing && !user.isFollower
-                      ? "Follow"
-                      : "Unfollow"}
-                  </Button>
+
+                  <ButtonFollowUnfollow user={user} />
                 </Stack>
               );
             })}
