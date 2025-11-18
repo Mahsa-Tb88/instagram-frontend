@@ -1,5 +1,4 @@
 import { Avatar, Stack, Typography } from "@mui/material";
-import React from "react";
 import type { User } from "../../types/types";
 import { Link } from "react-router";
 import ButtonFollowUnfollow from "./ButtonFollowUnfollow";
