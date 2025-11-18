@@ -13,17 +13,23 @@ export default function ButtonFollowUnfollow({ user }: { user: User }) {
       : "Unfollow"
   );
 
-  const [isStatusChanged, setIsStatusChanged] = useState(false);
-
   const followUser = useFollowUser();
   const UnfollowUser = useUnfollowUser();
 
   function followStatusHandler() {
-    console.log(followStatus);
     if (followStatus == "Follow back" || followStatus == "Follow") {
       const previousStatus = followStatus;
       setFollowStatus("Unfollow");
       followUser.mutate(user._id, {
+        onError() {
+          setFollowStatus(previousStatus);
+          toast.error(followUser.error?.message);
+        },
+      });
+    } else {
+      const previousStatus = followStatus;
+      setFollowStatus(user.isFollowing ? "Follow back" : "Follow");
+      UnfollowUser.mutate(user._id, {
         onError() {
           setFollowStatus(previousStatus);
           toast.error(followUser.error?.message);
@@ -34,16 +40,6 @@ export default function ButtonFollowUnfollow({ user }: { user: User }) {
 
   return (
     <Stack>
-      {/* {user.isFollowing && !user.isFollower ? (
-        <Button sx={{ width: "120px" }} onClick={() => followUserHandler()}>
-          Follow back
-        </Button>
-      ) : !user.isFollowing && !user.isFollower ? (
-        <Button sx={{ width: "120px" }}> Follow</Button>
-      ) : (
-        <Button sx={{ width: "120px" }}>Unfollow</Button>
-      )} */}
-
       <Button sx={{ width: "120px" }} onClick={() => followStatusHandler()}>
         {followStatus}
       </Button>
