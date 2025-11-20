@@ -4,6 +4,7 @@ import {
   GetProfileResponse,
   type FeedResponse,
   type GetPostResponse,
+  type getUserFollowers,
   type GetUserPostsResponse,
   type InitResponse,
 } from "./responseTypes";
@@ -89,5 +90,12 @@ export function useFindUser(q: string) {
     queryKey: ["findSearchUser", q],
     queryFn: () => axios.get("/users/search/findUser/", { params: { q } }),
     enabled: !!q,
+  });
+}
+
+export function useGetFollowers(username: string) {
+  return useQuery({
+    queryKey: ["profile", username],
+    queryFn: () => axios.get<getUserFollowers>("/users/" + username + "/followers"),
   });
 }

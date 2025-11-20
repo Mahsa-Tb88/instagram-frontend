@@ -39,6 +39,8 @@ export default function ProfileInfo() {
 
   const user = (data?.data?.body ?? {}) as Profile;
 
+  
+
   return (
     <Stack>
       {isPending ? (

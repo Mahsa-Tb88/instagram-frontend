@@ -12,8 +12,6 @@ export default function UserSearch() {
   const [userList, setUserList] = useState<User[]>([]);
   const { isPending, isFetching, data, error, refetch } = useFindUser(q);
 
-  console.log("data ", data?.data?.body?.users);
-
   useEffect(() => {
     const timeOut = setTimeout(() => {
       setQ(search);
@@ -47,7 +45,9 @@ export default function UserSearch() {
             <UserList userList={userList} />
           </Stack>
         ) : !userList.length && search && !isPending ? (
-          <Typography>Nothing found!</Typography>
+          <Typography textAlign={"center"} fontWeight={"600"} >
+            Nothing found!
+          </Typography>
         ) : (
           ""
         )}

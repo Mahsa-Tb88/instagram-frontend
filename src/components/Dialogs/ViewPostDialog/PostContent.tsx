@@ -7,7 +7,6 @@ import { useNavigate } from "react-router";
 import { MdSend } from "react-icons/md";
 import { toast } from "react-toastify";
 import UserComment from "./UserComment";
-import { Comment } from "html-react-parser";
 
 type PostContentProps = {
   post: Post;
