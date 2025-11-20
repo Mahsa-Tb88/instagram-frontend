@@ -8,6 +8,7 @@ import { Outlet } from "react-router";
 import Initializer from "./layouts/Initializer/Initializer";
 import ConfirmDialog from "./components/Dialogs/ConfirmDialog";
 import ViewPostDialog from "./components/Dialogs/ViewPostDialog/ViewPostDialog";
+import ViewListUserFollow from "./components/Dialogs/ViewListUserFollow/ViewListUserFollow";
 
 function App() {
   const isInitialized = useAppStore((state) => state.initialized);
@@ -24,6 +25,7 @@ function App() {
       {isInitialized ? <Outlet /> : <Initializer />}
       <ConfirmDialog />
       <ViewPostDialog />
+      <ViewListUserFollow />
     </ThemeProvider>
   );
 }

@@ -9,6 +9,8 @@ import noImage from "../../assets/images/no-image.jpg";
 import { useState } from "react";
 import { useUserStore } from "../../store/store";
 import { useFollowUser, useUnfollowUser } from "../../http/mutation";
+import { viewList } from "../../components/Dialogs/ViewListUserFollow/ViewListUserFollow";
+import { showViewPostDialog } from "../../components/Dialogs/ViewPostDialog/ViewPostDialog";
 
 export default function ProfileInfo() {
   const { username } = useParams<{ username: string }>();
@@ -38,8 +40,6 @@ export default function ProfileInfo() {
   }
 
   const user = (data?.data?.body ?? {}) as Profile;
-
-  
 
   return (
     <Stack>
@@ -102,7 +102,12 @@ export default function ProfileInfo() {
               <Typography bgcolor="#f2f2f2" borderRadius={1} py={1} px={2}>
                 <b>{user.postCounts}&nbsp;</b>Post
               </Typography>
-              <Button sx={{ py: 1, px: 2 }} disableElevation color="light">
+              <Button
+                sx={{ py: 1, px: 2 }}
+                disableElevation
+                color="light"
+                onClick={() => viewList()}
+              >
                 <b>{user.followers.length}&nbsp;</b>Followers
               </Button>
               <Button sx={{ py: 1, px: 2 }} disableElevation color="light">
