@@ -11,4 +11,4 @@ export type FeedResponse = Response & { body: { count: number; posts: Post[] } }
 export type GetPostResponse = Response & { body: Post };
 export type GetProfileResponse = Response & { body: Profile };
 export type GetUserPostsResponse = Response & { body: { posts: Post[]; count: number } };
-export type getUserFollowers = Response & { body: { user: User[] | []; count: number } };
+export type getUserFollowers = Response & { body: { users: User[] | []; count: number } };

@@ -1,4 +1,4 @@
-import { Container, Grid, Skeleton, Stack } from "@mui/material";
+import { Container, Skeleton, Stack } from "@mui/material";
 
 export default function UserListSkeleton() {
   return (

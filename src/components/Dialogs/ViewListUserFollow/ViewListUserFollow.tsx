@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MyDialog from "../../Customized/MyDialog";
-import { Box, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Avatar, Box, DialogContent, DialogTitle, Stack, Typography } from "@mui/material";
 import { useAppStore } from "../../../store/store";
 import { useGetFollowers } from "../../../http/queries";
 import { useParams } from "react-router";
@@ -23,11 +23,14 @@ export default function ViewListUserFollow() {
     };
   }, []);
 
+  console.log("data is ...", data);
+  const userList = data?.data?.body?.users || [];
+
   return (
     <MyDialog open={open} fullWidth maxWidth="md" fullScreen={isMobile} setOpen={setOpen}>
       <DialogTitle>Follower</DialogTitle>
       <DialogContent sx={{ p: 0, m: 0 }}>
-        {!isFetching ? (
+        {isFetching ? (
           <UserListSkeleton />
         ) : error ? (
           <Box
@@ -41,7 +44,17 @@ export default function ViewListUserFollow() {
             <LoadingError message={error.message} handleAction={refetch} />
           </Box>
         ) : (
-          <Typography>userlist</Typography>
+          <Typography>
+            {userList.map((p, index) => {
+              return (
+                <Stack key={index}>
+                  <Avatar src={SERVER_URL + p.profilePicture} />
+                  <Typography>{p.username}</Typography>
+                  <Typography>{p.fullname}</Typography>
+                </Stack>
+              );
+            })}
+          </Typography>
         )}
       </DialogContent>
     </MyDialog>
