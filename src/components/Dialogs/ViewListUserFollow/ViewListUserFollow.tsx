@@ -5,6 +5,7 @@ import { useAppStore } from "../../../store/store";
 import { useGetFollowers } from "../../../http/queries";
 import { useParams } from "react-router";
 import LoadingError from "../../LoadingError";
+import UserListSkeleton from "./UserListSkeleton";
 
 let viewList: () => void;
 // eslint-disable-next-line react-refresh/only-export-components
@@ -26,8 +27,8 @@ export default function ViewListUserFollow() {
     <MyDialog open={open} fullWidth maxWidth="md" fullScreen={isMobile} setOpen={setOpen}>
       <DialogTitle>Follower</DialogTitle>
       <DialogContent sx={{ p: 0, m: 0 }}>
-        {isFetching ? (
-          "skeleton"
+        {!isFetching ? (
+          <UserListSkeleton />
         ) : error ? (
           <Box
             height={500}
@@ -46,4 +47,3 @@ export default function ViewListUserFollow() {
     </MyDialog>
   );
 }
-

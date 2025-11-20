@@ -10,7 +10,6 @@ import { useState } from "react";
 import { useUserStore } from "../../store/store";
 import { useFollowUser, useUnfollowUser } from "../../http/mutation";
 import { viewList } from "../../components/Dialogs/ViewListUserFollow/ViewListUserFollow";
-import { showViewPostDialog } from "../../components/Dialogs/ViewPostDialog/ViewPostDialog";
 
 export default function ProfileInfo() {
   const { username } = useParams<{ username: string }>();
@@ -66,7 +65,7 @@ export default function ProfileInfo() {
               }}
             />
             <Typography textAlign="center" fontWeight="bold" fontSize={{ xs: 18, sm: 22, md: 24 }}>
-              {user.username.slice(0, 1).toUpperCase() + user.username.slice(1)}
+              {user?.username?.slice(0, 1).toUpperCase() + user?.username?.slice(1)}
             </Typography>
           </Grid>
           <Grid size={9}>
@@ -108,10 +107,10 @@ export default function ProfileInfo() {
                 color="light"
                 onClick={() => viewList()}
               >
-                <b>{user.followers.length}&nbsp;</b>Followers
+                <b>{user?.followers?.length}&nbsp;</b>Followers
               </Button>
               <Button sx={{ py: 1, px: 2 }} disableElevation color="light">
-                <b>{user.following.length}&nbsp;</b>Following
+                <b>{user?.following?.length}&nbsp;</b>Following
               </Button>
             </Stack>
           </Grid>
@@ -124,13 +123,18 @@ export default function ProfileInfo() {
               my={2}
             >
               <Typography bgcolor="#f2f2f2" borderRadius={1} py={1} px={2}>
-                <b>{user.postCounts}&nbsp; Post</b>
+                <b>{user?.postCounts}&nbsp; Post</b>
               </Typography>
-              <Button sx={{ py: 1, px: 2 }} disableElevation color="light">
-                <b>{user.followers.length}&nbsp;</b>Followers
+              <Button
+                sx={{ py: 1, px: 2 }}
+                disableElevation
+                color="light"
+                onClick={() => viewList()}
+              >
+                <b>{user?.followers?.length}&nbsp;</b>Followers
               </Button>
               <Button sx={{ py: 1, px: 2 }} disableElevation color="light">
-                <b>{user.following.length}&nbsp;</b>Following.
+                <b>{user?.following?.length}&nbsp;</b>Following.
               </Button>
             </Stack>
           </Grid>
