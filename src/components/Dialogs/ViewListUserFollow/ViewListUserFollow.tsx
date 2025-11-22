@@ -45,17 +45,26 @@ export default function ViewListUserFollow() {
             <LoadingError message={error.message} handleAction={refetch} />
           </Box>
         ) : (
-          <Typography>
+          <Stack p={4}>
             {userList.map((p, index) => {
               return (
-                <Stack key={index}>
-                  <Avatar src={SERVER_URL + p.profilePicture} />
-                  <Typography>{p.username}</Typography>
-                  <Typography>{p.fullname}</Typography>
+                <Stack
+                  height="100%"
+                  key={index}
+                  flexDirection={"row"}
+                  alignItems={"center"}
+                  width={"100%"}
+                  mb={3}
+                >
+                  <Avatar src={SERVER_URL + p.profilePicture} sx={{ mr: 1 }} />
+                  <Stack>
+                    <Typography>{p.username}</Typography>
+                    <Typography>{p.fullname}</Typography>
+                  </Stack>
                 </Stack>
               );
             })}
-          </Typography>
+          </Stack>
         )}
       </DialogContent>
     </MyDialog>
