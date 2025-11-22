@@ -6,6 +6,7 @@ import { useGetFollowers } from "../../../http/queries";
 import LoadingError from "../../LoadingError";
 import UserListSkeleton from "./UserListSkeleton";
 import type { User } from "../../../types/types";
+import { useNavigate } from "react-router";
 
 let viewList: (u: string) => void;
 // eslint-disable-next-line react-refresh/only-export-components
@@ -13,6 +14,7 @@ export { viewList };
 
 export default function ViewListUserFollow() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const isMobile = useAppStore((state) => state.isMobile);
   const [username, setUsername] = useState("");
   const { data, error, isFetching, refetch } = useGetFollowers(username);
@@ -23,6 +25,14 @@ export default function ViewListUserFollow() {
       setUsername(username);
     };
   }, []);
+
+  function HandleGoToProfile(u: string) {
+    setOpen(false);
+    setUsername("");
+    setTimeout(() => {
+      navigate("/user/" + u);
+    }, 50);
+  }
 
   console.log("userFolloerList is ...", data);
   const userList = (data?.data?.body?.users ?? []) as User[];
@@ -55,6 +65,7 @@ export default function ViewListUserFollow() {
                   alignItems={"center"}
                   width={"100%"}
                   mb={3}
+                  onClick={() => HandleGoToProfile(p.username)}
                 >
                   <Avatar src={SERVER_URL + p.profilePicture} sx={{ mr: 1 }} />
                   <Stack>
