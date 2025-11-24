@@ -100,3 +100,10 @@ export function useGetFollowers(username: string) {
     enabled: !!username,
   });
 }
+export function useGetFollowings(username: string) {
+  return useQuery({
+    queryKey: ["followings", username],
+    queryFn: () => axios.get<getUserFollowers>("/users/" + username + "/followings"),
+    enabled: !!username,
+  });
+}

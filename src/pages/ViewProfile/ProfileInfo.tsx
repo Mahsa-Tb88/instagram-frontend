@@ -129,11 +129,16 @@ export default function ProfileInfo() {
                 sx={{ py: 1, px: 2 }}
                 disableElevation
                 color="light"
-                onClick={() => viewList()}
+                onClick={() => viewListFollower(username!)}
               >
                 <b>{user?.followers?.length}&nbsp;</b>Followers
               </Button>
-              <Button sx={{ py: 1, px: 2 }} disableElevation color="light">
+              <Button
+                sx={{ py: 1, px: 2 }}
+                disableElevation
+                color="light"
+                onClick={() => viewList(username!)}
+              >
                 <b>{user?.following?.length}&nbsp;</b>Following.
               </Button>
             </Stack>

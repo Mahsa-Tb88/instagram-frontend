@@ -8,7 +8,7 @@ import UserListSkeleton from "./UserListSkeleton";
 import type { User } from "../../../types/types";
 import { useNavigate } from "react-router";
 
-let viewList: (u: string) => void;
+let viewList: (u: string, status: string) => void;
 // eslint-disable-next-line react-refresh/only-export-components
 export { viewList };
 
@@ -16,19 +16,20 @@ export default function ViewListUserFollow() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const isMobile = useAppStore((state) => state.isMobile);
-  const [username, setUsername] = useState("");
-  const { data, error, isFetching, refetch } = useGetFollowers(username);
+  const [usernameFollower, setUsernameFollower] = useState("");
+  const [usernameFollowing, setUsernameFollowing] = useState("");
+  const userFollower = useGetFollowers(usernameFollower);
+  const userFollowing = useGetFollowing(usernameFollowing);
 
   useEffect(() => {
-    viewList = (username: string) => {
+    viewList = (username: string, status: string) => {
       setOpen(true);
-      setUsername(username);
     };
   }, []);
 
   function HandleGoToProfile(u: string) {
     setOpen(false);
-    setUsername("");
+
     setTimeout(() => {
       navigate("/user/" + u);
     }, 50);
