@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import MyDialog from "../../Customized/MyDialog";
 import { Avatar, Box, DialogContent, DialogTitle, Stack, Typography } from "@mui/material";
 import { useAppStore } from "../../../store/store";
-import { useGetFollowers } from "../../../http/queries";
+import { useGetFollowers, useGetFollowings } from "../../../http/queries";
 import LoadingError from "../../LoadingError";
 import UserListSkeleton from "./UserListSkeleton";
 import type { User } from "../../../types/types";
@@ -19,32 +19,41 @@ export default function ViewListUserFollow() {
   const [usernameFollower, setUsernameFollower] = useState("");
   const [usernameFollowing, setUsernameFollowing] = useState("");
   const userFollower = useGetFollowers(usernameFollower);
-  const userFollowing = useGetFollowing(usernameFollowing);
-
+  const userFollowing = useGetFollowings(usernameFollowing);
+  let status;
   useEffect(() => {
     viewList = (username: string, status: string) => {
       setOpen(true);
+      if (status == "Follower") {
+        setUsernameFollower(username);
+        status = "Follower";
+      } else {
+        setUsernameFollowing(username);
+        status = "Following";
+      }
     };
   }, []);
 
   function HandleGoToProfile(u: string) {
     setOpen(false);
-
+    setUsernameFollower("");
+    setUsernameFollowing("");
     setTimeout(() => {
       navigate("/user/" + u);
     }, 50);
   }
 
-  console.log("userFolloerList is ...", data);
-  const userList = (data?.data?.body?.users ?? []) as User[];
-
+  const userList =
+    status == "Follower"
+      ? userFollower.data?.data?.body?.users ?? []
+      : userFollowing.data?.data?.body?.users ?? [];
   return (
     <MyDialog open={open} fullWidth maxWidth="md" fullScreen={isMobile} setOpen={setOpen}>
       <DialogTitle>Follower</DialogTitle>
       <DialogContent sx={{ p: 0, m: 0 }}>
-        {isFetching ? (
+        { status == userFollower.isFetching || userFollowing.isFetching ? (
           <UserListSkeleton />
-        ) : error ? (
+        ) : userFollower.error || userFollowing.error ? (
           <Box
             height={500}
             py={3}
