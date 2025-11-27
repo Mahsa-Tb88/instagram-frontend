@@ -5,7 +5,6 @@ import { useAppStore } from "../../../store/store";
 import { useGetFollowers, useGetFollowings } from "../../../http/queries";
 import LoadingError from "../../LoadingError";
 import UserListSkeleton from "./UserListSkeleton";
-import type { User } from "../../../types/types";
 import { useNavigate } from "react-router";
 
 let viewList: (u: string, status: string) => void;
@@ -18,18 +17,20 @@ export default function ViewListUserFollow() {
   const isMobile = useAppStore((state) => state.isMobile);
   const [usernameFollower, setUsernameFollower] = useState("");
   const [usernameFollowing, setUsernameFollowing] = useState("");
+  const [status, setStatus] = useState("");
   const userFollower = useGetFollowers(usernameFollower);
   const userFollowing = useGetFollowings(usernameFollowing);
-  let status;
+
   useEffect(() => {
     viewList = (username: string, status: string) => {
+      console.log("username ", username, "status ", status);
       setOpen(true);
-      if (status == "Follower") {
-        setUsernameFollower(username);
-        status = "Follower";
-      } else {
+      if (status == "Following") {
         setUsernameFollowing(username);
-        status = "Following";
+        setStatus("Following");
+      } else {
+        setUsernameFollower(username);
+        setStatus("Follower");
       }
     };
   }, []);
@@ -42,16 +43,18 @@ export default function ViewListUserFollow() {
       navigate("/user/" + u);
     }, 50);
   }
-
   const userList =
-    status == "Follower"
-      ? userFollower.data?.data?.body?.users ?? []
-      : userFollowing.data?.data?.body?.users ?? [];
+    status == "Following"
+      ? userFollowing.data?.data?.body?.users ?? []
+      : userFollower.data?.data?.body?.users ?? [];
+  console.log("userlist =====> ", userList);
+  console.log("userfollowing is ", userFollowing.data);
+
   return (
     <MyDialog open={open} fullWidth maxWidth="md" fullScreen={isMobile} setOpen={setOpen}>
-      <DialogTitle>Follower</DialogTitle>
+      <DialogTitle> {status == "Follower" ? "Follower" : "Following"}</DialogTitle>
       <DialogContent sx={{ p: 0, m: 0 }}>
-        { status == userFollower.isFetching || userFollowing.isFetching ? (
+        {userFollower.isFetching || userFollowing.isFetching ? (
           <UserListSkeleton />
         ) : userFollower.error || userFollowing.error ? (
           <Box
@@ -62,7 +65,16 @@ export default function ViewListUserFollow() {
             alignItems="center"
             width={1}
           >
-            <LoadingError message={error.message} handleAction={refetch} />
+            <LoadingError
+              message={
+                status == "Follower"
+                  ? userFollower.error?.message
+                  : status == "Following"
+                  ? userFollowing.error?.message
+                  : "There is an error"
+              }
+              handleAction={status == "Follower" ? userFollower.refetch : userFollowing.refetch}
+            />
           </Box>
         ) : (
           <Stack p={4}>

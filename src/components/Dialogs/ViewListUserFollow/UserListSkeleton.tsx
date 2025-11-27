@@ -11,7 +11,7 @@ export default function UserListSkeleton() {
         alignItems="center"
         width={"100%"}
       >
-        {Array.from({ length: 5 }).map((_, index) => {
+        {Array.from({ length: 9 }).map((_, index) => {
           return (
             <Stack
               flexDirection={"row"}

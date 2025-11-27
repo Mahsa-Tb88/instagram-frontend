@@ -3,8 +3,8 @@ import axios from "axios";
 import {
   GetProfileResponse,
   type FeedResponse,
+  type getFFUser,
   type GetPostResponse,
-  type getUserFollowers,
   type GetUserPostsResponse,
   type InitResponse,
 } from "./responseTypes";
@@ -96,14 +96,14 @@ export function useFindUser(q: string) {
 export function useGetFollowers(username: string) {
   return useQuery({
     queryKey: ["followers", username],
-    queryFn: () => axios.get<getUserFollowers>("/users/" + username + "/followers"),
+    queryFn: () => axios.get<getFFUser>("/users/" + username + "/followers"),
     enabled: !!username,
   });
 }
 export function useGetFollowings(username: string) {
   return useQuery({
     queryKey: ["followings", username],
-    queryFn: () => axios.get<getUserFollowers>("/users/" + username + "/followings"),
+    queryFn: () => axios.get<getFFUser>("/users/" + username + "/followings"),
     enabled: !!username,
   });
 }

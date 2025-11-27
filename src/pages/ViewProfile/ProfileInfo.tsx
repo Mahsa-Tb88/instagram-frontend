@@ -105,11 +105,16 @@ export default function ProfileInfo() {
                 sx={{ py: 1, px: 2 }}
                 disableElevation
                 color="light"
-                onClick={() => viewList(username!)}
+                onClick={() => viewList(username!, "Follower")}
               >
                 <b>{user?.followers?.length}&nbsp;</b>Followers
               </Button>
-              <Button sx={{ py: 1, px: 2 }} disableElevation color="light">
+              <Button
+                sx={{ py: 1, px: 2 }}
+                disableElevation
+                color="light"
+                onClick={() => viewList(username!, "Following")}
+              >
                 <b>{user?.following?.length}&nbsp;</b>Following
               </Button>
             </Stack>
@@ -129,7 +134,7 @@ export default function ProfileInfo() {
                 sx={{ py: 1, px: 2 }}
                 disableElevation
                 color="light"
-                onClick={() => viewListFollower(username!)}
+                onClick={() => viewList(username!, "Follower")}
               >
                 <b>{user?.followers?.length}&nbsp;</b>Followers
               </Button>
@@ -137,7 +142,7 @@ export default function ProfileInfo() {
                 sx={{ py: 1, px: 2 }}
                 disableElevation
                 color="light"
-                onClick={() => viewList(username!)}
+                onClick={() => viewList(username!, "Following")}
               >
                 <b>{user?.following?.length}&nbsp;</b>Following.
               </Button>
