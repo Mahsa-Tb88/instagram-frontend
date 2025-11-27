@@ -93,10 +93,23 @@ export function useFindUser(q: string) {
   });
 }
 
-export function useGetFollowers(username: string) {
-  return useQuery({
-    queryKey: ["followers", username],
-    queryFn: () => axios.get<getFFUser>("/users/" + username + "/followers"),
+export function useGetFollowers(username: string, limit: number) {
+  return useInfiniteQuery({
+    queryKey: ["followers", username, limit],
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) =>
+      axios.get<getFFUser>("/users/" + username + "/followers", {
+        params: { page: pageParam, limit },
+      }),
+    getNextPageParam(lastPage, pages, lastPageParam) {
+      const totalUsers = lastPage.data.body.count;
+      const totalPages = Math.ceil(totalUsers / limit);
+      if (totalPages > pages.length) {
+        return lastPageParam + 1;
+      } else {
+        return;
+      }
+    },
     enabled: !!username,
   });
 }
