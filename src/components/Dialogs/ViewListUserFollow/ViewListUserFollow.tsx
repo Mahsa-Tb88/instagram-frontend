@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import MyDialog from "../../Customized/MyDialog";
 import { Avatar, Box, DialogContent, DialogTitle, Stack, Typography } from "@mui/material";
 import { useAppStore } from "../../../store/store";
-import { useGetFollowers, useGetFollowings } from "../../../http/queries";
 import LoadingError from "../../LoadingError";
 import UserListSkeleton from "./UserListSkeleton";
 import { useNavigate } from "react-router";
+import { useGetFollowers, useGetFollowings } from "../../../http/queries";
 
 let viewList: (u: string, status: string) => void;
 // eslint-disable-next-line react-refresh/only-export-components
@@ -18,8 +18,8 @@ export default function ViewListUserFollow() {
   const [usernameFollower, setUsernameFollower] = useState("");
   const [usernameFollowing, setUsernameFollowing] = useState("");
   const [status, setStatus] = useState("");
-  const userFollower = useGetFollowers(usernameFollower);
-  const userFollowing = useGetFollowings(usernameFollowing);
+  const userFollower = useGetFollowers(usernameFollower, 10);
+  const userFollowing = useGetFollowings(usernameFollowing, 10);
 
   useEffect(() => {
     viewList = (username: string, status: string) => {
