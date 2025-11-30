@@ -1,11 +1,21 @@
 import { useEffect, useState } from "react";
 import MyDialog from "../../Customized/MyDialog";
-import { Avatar, Box, DialogContent, DialogTitle, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  CircularProgress,
+  DialogContent,
+  DialogTitle,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useAppStore } from "../../../store/store";
 import LoadingError from "../../LoadingError";
 import UserListSkeleton from "./UserListSkeleton";
 import { useNavigate } from "react-router";
 import { useGetFollowers, useGetFollowings } from "../../../http/queries";
+import { useInView } from "react-intersection-observer";
+import type { User } from "../../../types/types";
 
 let viewList: (u: string, status: string) => void;
 // eslint-disable-next-line react-refresh/only-export-components
@@ -20,6 +30,25 @@ export default function ViewListUserFollow() {
   const [status, setStatus] = useState("");
   const userFollower = useGetFollowers(usernameFollower, 10);
   const userFollowing = useGetFollowings(usernameFollowing, 10);
+
+  const { ref, inView } = useInView({ rootMargin: "120px" });
+
+  useEffect(() => {
+    if (status == "Follower") {
+      if (inView && userFollower.hasNextPage && !userFollower.isFetching && !userFollower.error) {
+        userFollower.fetchNextPage();
+      }
+    } else {
+      if (
+        inView &&
+        userFollowing.hasNextPage &&
+        !userFollowing.isFetching &&
+        !userFollowing.error
+      ) {
+        userFollower.fetchNextPage();
+      }
+    }
+  }, [inView]);
 
   useEffect(() => {
     viewList = (username: string, status: string) => {
@@ -67,18 +96,14 @@ export default function ViewListUserFollow() {
           >
             <LoadingError
               message={
-                status == "Follower"
-                  ? userFollower.error?.message
-                  : status == "Following"
-                  ? userFollowing.error?.message
-                  : "There is an error"
+                status == "Follower" ? userFollower.error?.message : userFollowing.error?.message
               }
               handleAction={status == "Follower" ? userFollower.refetch : userFollowing.refetch}
             />
           </Box>
         ) : (
           <Stack p={4}>
-            {userList.map((p, index) => {
+            {userList.map((p: User, index: number) => {
               return (
                 <Stack
                   height="100%"
@@ -99,6 +124,45 @@ export default function ViewListUserFollow() {
             })}
           </Stack>
         )}
+        {(status == "Follower" ? userFollower.isFetching : userFollowing.isFetching) && (
+          <Box textAlign="center" width={1} mt={2}>
+            <CircularProgress />
+          </Box>
+        )}
+
+        {status == "Follower"
+          ? !userFollower.hasNextPage && !userFollower.isFetching && !userFollower.error
+          : !userFollowing.hasNextPage &&
+            !userFollowing.isFetching &&
+            !userFollowing.error && (
+              <div
+                style={{
+                  height: 54,
+                  paddingTop: 6,
+                  fontSize: 18,
+                  textAlign: "center",
+                }}
+              >
+                <b>No more followers</b>
+              </div>
+            )}
+
+        {status == "Follower"
+          ? userFollower.error &&
+            !userFollower.isFetching && (
+              <LoadingError
+                message={userFollower.error.message}
+                handleAction={userFollower.fetchNextPage}
+              />
+            )
+          : userFollowing.error &&
+            !userFollowing.isFetching && (
+              <LoadingError
+                message={userFollowing.error.message}
+                handleAction={userFollowing.fetchNextPage}
+              />
+            )}
+        <div ref={ref} />
       </DialogContent>
     </MyDialog>
   );
