@@ -38,14 +38,15 @@ export default function ViewListUserFollow() {
       if (inView && userFollower.hasNextPage && !userFollower.isFetching && !userFollower.error) {
         userFollower.fetchNextPage();
       }
-    } else {
+    }
+    if (status == "Following") {
       if (
         inView &&
         userFollowing.hasNextPage &&
         !userFollowing.isFetching &&
         !userFollowing.error
       ) {
-        userFollower.fetchNextPage();
+        userFollowing.fetchNextPage();
       }
     }
   }, [inView]);
@@ -73,11 +74,11 @@ export default function ViewListUserFollow() {
     }, 50);
   }
   const userList =
-    status == "Following"
-      ? userFollowing.data?.data?.body?.users ?? []
-      : userFollower.data?.data?.body?.users ?? [];
-  console.log("userlist =====> ", userList);
-  console.log("userfollowing is ", userFollowing.data);
+    status == "Follower"
+      ? userFollower.data?.pages
+      : status == "Following"
+      ? userFollowing.data?.pages
+      : [];
 
   return (
     <MyDialog open={open} fullWidth maxWidth="md" fullScreen={isMobile} setOpen={setOpen}>
@@ -103,24 +104,26 @@ export default function ViewListUserFollow() {
           </Box>
         ) : (
           <Stack p={4}>
-            {userList.map((p: User, index: number) => {
-              return (
-                <Stack
-                  height="100%"
-                  key={index}
-                  flexDirection={"row"}
-                  alignItems={"center"}
-                  width={"100%"}
-                  mb={3}
-                  onClick={() => HandleGoToProfile(p.username)}
-                >
-                  <Avatar src={SERVER_URL + p.profilePicture} sx={{ mr: 1 }} />
-                  <Stack>
-                    <Typography>{p.username}</Typography>
-                    <Typography>{p.fullname}</Typography>
+            {userList!.map((page: any) => {
+              return page.data.body.users.map((p: User) => {
+                return (
+                  <Stack
+                    height="100%"
+                    key={p._id}
+                    flexDirection={"row"}
+                    alignItems={"center"}
+                    width={"100%"}
+                    mb={3}
+                    onClick={() => HandleGoToProfile(p.username)}
+                  >
+                    <Avatar src={SERVER_URL + p.profilePicture} sx={{ mr: 1 }} />
+                    <Stack>
+                      <Typography>{p.username}</Typography>
+                      <Typography>{p.fullname}</Typography>
+                    </Stack>
                   </Stack>
-                </Stack>
-              );
+                );
+              });
             })}
           </Stack>
         )}
@@ -147,21 +150,18 @@ export default function ViewListUserFollow() {
               </div>
             )}
 
-        {status == "Follower"
-          ? userFollower.error &&
-            !userFollower.isFetching && (
-              <LoadingError
-                message={userFollower.error.message}
-                handleAction={userFollower.fetchNextPage}
-              />
-            )
-          : userFollowing.error &&
-            !userFollowing.isFetching && (
-              <LoadingError
-                message={userFollowing.error.message}
-                handleAction={userFollowing.fetchNextPage}
-              />
-            )}
+        {status == "Follower" && userFollower.error && !userFollower.isFetching && (
+          <LoadingError
+            message={userFollower.error.message}
+            handleAction={userFollower.fetchNextPage}
+          />
+        )}
+        {status == "Following" && userFollowing.error && !userFollowing.isFetching && (
+          <LoadingError
+            message={userFollowing.error.message}
+            handleAction={userFollowing.fetchNextPage}
+          />
+        )}
         <div ref={ref} />
       </DialogContent>
     </MyDialog>
