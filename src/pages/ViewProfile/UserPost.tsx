@@ -72,7 +72,7 @@ export default function UserPost({ post }: PostProps) {
             render: "The post was deleted Successfully!",
             autoClose: 2000,
           });
-          client.invalidateQueries({ queryKey: ["userPosts", 10] });
+          client.invalidateQueries({ queryKey: ["userPosts", username] });
         },
         onError(e) {
           toast.update(deleting, {
