@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, Stack, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router";
 import { useGetUserPosts } from "../../http/queries";
 import UserPostsSkeleton from "./skeletons/UserPostsSkeleton";
@@ -49,21 +49,18 @@ export default function UserPosts() {
               ));
             })}
           </Grid>
-
-          {!hasNextPage && !isFetching && !error && (
-            <Box textAlign="center" bgcolor="#eee" p={4}>
-              {postExists ? (
-                <Typography>No more posts</Typography>
-              ) : (
-                <Typography>No post exists</Typography>
-              )}
+          {isFetching && (
+            <Box textAlign={"center"} width={1} mt={2}>
+              <CircularProgress />
             </Box>
           )}
 
-          {error && !isFetching && <LoadingError message={error.message} handleAction={refetch} />}
+          {error && !isFetching && (
+            <LoadingError message={error.message} handleAction={fetchNextPage} />
+          )}
+          <div ref={ref} />
         </Box>
       )}
-      <div ref={ref} />
     </Stack>
   );
 }
