@@ -67,7 +67,7 @@ export function useGetProfile(username: string) {
 
 export function useGetUserPosts(username: string, limit: number) {
   return useInfiniteQuery({
-    queryKey: ["userPosts", limit],
+    queryKey: ["userPosts", username, limit],
     initialPageParam: 1,
     queryFn: ({ pageParam }: { pageParam: number }) =>
       axios.get<GetUserPostsResponse>("/posts/" + username + "/posts", {

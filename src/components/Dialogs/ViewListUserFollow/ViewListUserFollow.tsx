@@ -53,7 +53,6 @@ export default function ViewListUserFollow() {
 
   useEffect(() => {
     viewList = (username: string, status: string) => {
-      console.log("username ", username, "status ", status);
       setOpen(true);
       if (status == "Following") {
         setUsernameFollowing(username);
@@ -104,7 +103,7 @@ export default function ViewListUserFollow() {
           </Box>
         ) : (
           <Stack p={4}>
-            {userList!.map((page: any) => {
+            {userList!.map((page) => {
               return page.data.body.users.map((p: User) => {
                 return (
                   <Stack
