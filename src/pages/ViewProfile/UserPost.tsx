@@ -52,21 +52,35 @@ export default function UserPost({ post }: PostProps) {
     }
   }
 
-  async function handleDeletePost() {
+  async function handleDeletePost(e: MouseEvent) {
+    e.stopPropagation();
     const answer = await showConfirmDialog(
       <p style={{ fontSize: 24 }}>Are you sure you want to delete this post</p>,
       "Yes",
       "No"
     );
     if (answer) {
+      const deleting = toast.loading(<i>Deleting...</i>, {
+        position: "bottom-left",
+        type: "info",
+      });
       deletePost.mutate(post._id, {
         onSuccess() {
-          console.log("success");
+          toast.update(deleting, {
+            type: "success",
+            isLoading: false,
+            render: "The post was deleted Successfully!",
+            autoClose: 2000,
+          });
           client.invalidateQueries({ queryKey: ["userPosts", 10] });
         },
         onError(e) {
-          console.log(e);
-          toast.error(e.message);
+          toast.update(deleting, {
+            type: "error",
+            isLoading: false,
+            render: e.message,
+            autoClose: 2000,
+          });
         },
       });
     }
