@@ -198,7 +198,7 @@ export default function UserPost({ post }: PostProps) {
 
             {/* Comments */}
             <Box display="flex" alignItems="center" gap={1}>
-              <IconButton sx={{ color: "white" }} onClick={() => showViewPostDialog(post._id)}>
+              <IconButton sx={{ color: "white" }}>
                 <MdComment size={24} />
               </IconButton>
               <Typography sx={{ color: "white", fontSize: 14 }}>{post.comments.length}</Typography>

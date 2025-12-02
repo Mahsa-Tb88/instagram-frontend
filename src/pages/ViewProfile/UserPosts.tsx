@@ -12,8 +12,10 @@ import { MdHome } from "react-icons/md";
 export default function UserPosts() {
   const { username } = useParams<{ username: string }>();
   const navigate = useNavigate();
-  const { data, error, fetchNextPage, hasNextPage, isFetching, refetch, isPending } =
-    useGetUserPosts(username!, 9);
+  const { data, error, fetchNextPage, hasNextPage, isFetching, isPending } = useGetUserPosts(
+    username!,
+    9
+  );
 
   const { ref, inView } = useInView({ rootMargin: "150px" });
   useEffect(() => {
@@ -21,7 +23,8 @@ export default function UserPosts() {
       fetchNextPage();
     }
   }, [inView]);
-  const postExists: boolean = !!data?.pages?.[0]?.data?.body?.count;
+
+  const postExists: boolean = !data?.pages?.[0]?.data?.body?.count;
 
   return (
     <Stack my={4}>
@@ -34,7 +37,7 @@ export default function UserPosts() {
           actionText="Back to home"
           actionIcon={<MdHome />}
         />
-      ) : !data?.pages[0].data.body.count ? (
+      ) : postExists ? (
         <Typography sx={{ textAlign: "center" }} fontWeight={600} fontSize={24} p={2}>
           No Posts yet!
         </Typography>
