@@ -27,14 +27,14 @@ export default function UserPost({ post }: PostProps) {
   const userId = useUserStore((state) => state._id);
   const liked = post.likes.includes(userId);
   const [likeChanged, setLikeChanged] = useState(false);
-  const [hover, setHover] = useState(false);
 
   const likePost = useLikePost();
   const unlikePost = useUnlikePost();
   const deletePost = useDeletePost();
   const client = useQueryClient();
 
-  function handleLikeUnlikePost() {
+  function handleLikeUnlikePost(e: MouseEvent) {
+    e.stopPropagation();
     setLikeChanged(!likeChanged);
 
     if (liked !== likeChanged) {
@@ -89,8 +89,6 @@ export default function UserPost({ post }: PostProps) {
   return (
     <Stack my={3}>
       <Card
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
         sx={{
           height: 400,
           position: "relative",
@@ -100,7 +98,9 @@ export default function UserPost({ post }: PostProps) {
           boxShadow: 3,
           // only show pointer on devices that support hover
           "@media (hover: hover)": { cursor: "pointer" },
+          "&:hover .cover": { visibility: "visible", opacity: 1 },
         }}
+        onClick={() => showViewPostDialog(post._id)}
       >
         <CardHeader
           sx={{
@@ -109,31 +109,10 @@ export default function UserPost({ post }: PostProps) {
           }}
           action={
             <Box sx={{ textAlign: "right", mb: 1 }}>
-              <IconButton
-                sx={{
-                  m: 0,
-                  p: "5px",
-                  opacity: hover ? 1 : 0,
-                  pointerEvents: hover ? "auto" : "none",
-                  transition: "opacity 0.3s",
-                }}
-                color="info"
-                LinkComponent={Link}
-                to={"/user/post/edit/" + post._id}
-              >
+              <IconButton color="info" LinkComponent={Link} to={"/user/post/edit/" + post._id}>
                 {username == post.user.username && <MdEdit size={14} />}
               </IconButton>
-              <IconButton
-                sx={{
-                  m: 0,
-                  p: "5px",
-                  opacity: hover ? 1 : 0,
-                  pointerEvents: hover ? "auto" : "none",
-                  transition: "opacity 0.3s",
-                }}
-                color="error"
-                onClick={handleDeletePost}
-              >
+              <IconButton color="error" onClick={handleDeletePost}>
                 {username == post.user.username && <MdDelete size={14} />}
               </IconButton>
             </Box>
@@ -149,62 +128,49 @@ export default function UserPost({ post }: PostProps) {
             <Typography>{post.caption}</Typography>
           )}
         </CardContent>
-        <Box
+
+        <CardActions
           sx={{
             position: "absolute",
-            inset: 0,
-            backgroundColor: hover ? "rgba(0,0,0,0.75)" : "rgba(0,0,0,0)",
-            transition: "background-color 220ms ease",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.4)",
             display: "flex",
-            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            pointerEvents: "none", // let mouse pass through to card
+            gap: 4,
+            py: 1,
+            visibility: "hidden",
+            opacity: 0,
+            pointerEvents: "auto",
+            transition: "all 0.3s ease",
           }}
-          aria-hidden={!hover}
-          onClick={() => showViewPostDialog(post._id)}
-        />
+          className="cover"
+        >
+          {/* Likes */}
+          <Box display="flex" alignItems="center" gap={1} onClick={handleLikeUnlikePost}>
+            <IconButton>
+              {liked !== likeChanged ? (
+                <MdFavorite color="red" size={24} />
+              ) : (
+                <MdFavorite size={24} color="white" />
+              )}
+            </IconButton>
+            <Typography sx={{ color: "white", fontSize: 14 }}>
+              {post.likes.length + (!likeChanged ? 0 : liked ? -1 : 1)}
+            </Typography>
+          </Box>
 
-        {hover && (
-          <CardActions
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: 0,
-              right: 0,
-              transform: "translateY(-50%)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 4,
-              py: 1,
-              pointerEvents: "auto",
-              transition: "all 0.3s ease",
-            }}
-          >
-            {/* Likes */}
-            <Box display="flex" alignItems="center" gap={1} onClick={handleLikeUnlikePost}>
-              <IconButton>
-                {liked !== likeChanged ? (
-                  <MdFavorite color="red" size={24} />
-                ) : (
-                  <MdFavorite size={24} color="white" />
-                )}
-              </IconButton>
-              <Typography sx={{ color: "white", fontSize: 14 }}>
-                {post.likes.length + (!likeChanged ? 0 : liked ? -1 : 1)}
-              </Typography>
-            </Box>
-
-            {/* Comments */}
-            <Box display="flex" alignItems="center" gap={1}>
-              <IconButton sx={{ color: "white" }}>
-                <MdComment size={24} />
-              </IconButton>
-              <Typography sx={{ color: "white", fontSize: 14 }}>{post.comments.length}</Typography>
-            </Box>
-          </CardActions>
-        )}
+          {/* Comments */}
+          <Box display="flex" alignItems="center" gap={1}>
+            <IconButton sx={{ color: "white" }}>
+              <MdComment size={24} />
+            </IconButton>
+            <Typography sx={{ color: "white", fontSize: 14 }}>{post.comments.length}</Typography>
+          </Box>
+        </CardActions>
       </Card>
     </Stack>
   );
