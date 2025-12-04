@@ -2,6 +2,8 @@
 import { Dialog, type DialogProps } from "@mui/material";
 import { useEffect, useRef } from "react";
 
+let openDialogCount = 0;
+
 export default function MyDialog(props: DialogProps & { setOpen: (b: boolean) => void }) {
   const { setOpen, children, ...ps } = props;
   //   const { setOpen: s, children, ...ps } = { ...props };
@@ -16,8 +18,12 @@ export default function MyDialog(props: DialogProps & { setOpen: (b: boolean) =>
     if (ps.open) {
       history.pushState("", "");
       isPopped.current = false;
+      openDialogCount++;
     } else if (!isPopped.current) {
-      history.back();
+      if (openDialogCount === 1) {
+        history.back();
+      }
+      openDialogCount--;
     }
   }, [ps.open]);
 

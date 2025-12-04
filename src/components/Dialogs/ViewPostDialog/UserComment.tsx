@@ -6,6 +6,7 @@ import { useUserStore } from "../../../store/store";
 import { useDeleteCommentPost, useEditCommentPost } from "../../../http/mutation";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
+import { showConfirmDialog } from "../ConfirmDialog";
 
 type CommentProps = {
   c: Comment;
@@ -30,22 +31,22 @@ export default function UserComment({
   const useDeleteComment = useDeleteCommentPost();
   const client = useQueryClient();
 
-  function deleteComment(id: string) {
-    // const answer = await showConfirmDialog(
-    //   <p style={{ fontSize: 24 }}>Are you sure you want to delete this comment</p>,
-    //   "Yes",
-    //   "No"
-    // );
+  async function deleteComment(id: string) {
+    const answer = await showConfirmDialog(
+      <p style={{ fontSize: 24 }}>Are you sure you want to delete this comment</p>,
+      "Yes",
+      "No"
+    );
 
-    
-    if (confirm("Are you sure you want to delete this comment")) {
+    // confirm("Are you sure you want to delete this comment")
+    if (answer) {
       const data = { id, postId: post._id };
       const updatedList = listComment.filter((l) => l._id !== id);
       setListComment(updatedList);
       useDeleteComment.mutate(data, {
         onSuccess() {
-          console.log("success");
-          // client.invalidateQueries({ queryKey: ["post", post._id] });
+          console.log("....succes delete msg");
+          toast.success("Message was deleted successfully!");
         },
         onError(e) {
           console.log(e);
