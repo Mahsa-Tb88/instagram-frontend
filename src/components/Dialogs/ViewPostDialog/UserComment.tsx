@@ -36,6 +36,8 @@ export default function UserComment({
     //   "Yes",
     //   "No"
     // );
+
+    
     if (confirm("Are you sure you want to delete this comment")) {
       const data = { id, postId: post._id };
       const updatedList = listComment.filter((l) => l._id !== id);

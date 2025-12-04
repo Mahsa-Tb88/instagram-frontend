@@ -7,15 +7,13 @@ import { useInView } from "react-intersection-observer";
 import LoadingError from "../../components/LoadingError";
 import { useEffect } from "react";
 import UserPost from "./UserPost";
-import { MdHome } from "react-icons/md";
+import { MdHome, MdRefresh } from "react-icons/md";
 
 export default function UserPosts() {
   const { username } = useParams<{ username: string }>();
   const navigate = useNavigate();
-  const { data, error, fetchNextPage, hasNextPage, isFetching, isPending } = useGetUserPosts(
-    username!,
-    9
-  );
+  const { data, error, fetchNextPage, hasNextPage, isFetching, isPending, refetch } =
+    useGetUserPosts(username!, 9);
 
   const { ref, inView } = useInView({ rootMargin: "150px" });
   useEffect(() => {
@@ -24,18 +22,19 @@ export default function UserPosts() {
     }
   }, [inView]);
 
-  const postExists: boolean = !data?.pages?.[0]?.data?.body?.count;
+  const postExists: boolean = data?.pages?.[0]?.data?.body?.count === 0;
+  console.log("erorrrr", error);
 
   return (
     <Stack my={4}>
       {isPending ? (
         <UserPostsSkeleton />
-      ) : error && error.status === 404 ? (
+      ) : error ? (
         <LoadingError
           message={error.message}
-          handleAction={() => navigate("/")}
-          actionText="Back to home"
-          actionIcon={<MdHome />}
+          handleAction={error.status === 404 ? () => navigate("/") : refetch}
+          actionText={error.status === 404 ? "Back to home" : "Retry"}
+          actionIcon={error.status === 404 ? <MdHome /> : <MdRefresh />}
         />
       ) : postExists ? (
         <Typography sx={{ textAlign: "center" }} fontWeight={600} fontSize={24} p={2}>

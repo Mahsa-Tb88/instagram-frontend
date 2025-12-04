@@ -57,6 +57,8 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
     //     user: { _id: "", username, fullname: "", profilePicture },
     //   },
     // ]);
+
+    
     setTimeout(() => ref.current!.scrollIntoView({ behavior: "smooth" }), 50);
     commentMutation.mutate(
       { text, id: post._id },

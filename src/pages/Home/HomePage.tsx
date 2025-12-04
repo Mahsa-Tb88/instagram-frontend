@@ -11,7 +11,7 @@ import { useAppStore } from "../../store/store";
 
 export default function HomePage() {
   const isMobile = useAppStore((state) => state.isMobile);
-  const { data, error, fetchNextPage, hasNextPage, isFetching, refetch } = useFeedPosts(10);
+  const { data, error, fetchNextPage, hasNextPage, isFetching } = useFeedPosts(10);
   const { ref, inView } = useInView({ rootMargin: "150px" });
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export default function HomePage() {
             )}
 
             {error && !isFetching && (
-              <LoadingError message={error.message} handleAction={refetch} />
+              <LoadingError message={error.message} handleAction={fetchNextPage} />
             )}
           </Box>
           <div ref={ref} />
