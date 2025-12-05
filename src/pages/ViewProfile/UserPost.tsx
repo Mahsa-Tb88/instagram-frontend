@@ -19,7 +19,7 @@ import { showConfirmDialog } from "../../components/Dialogs/ConfirmDialog";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import { showViewPostDialog } from "../../components/Dialogs/ViewPostDialog/ViewPostDialog";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 type PostProps = { post: Post };
 export default function UserPost({ post }: PostProps) {
@@ -32,6 +32,7 @@ export default function UserPost({ post }: PostProps) {
   const unlikePost = useUnlikePost();
   const deletePost = useDeletePost();
   const client = useQueryClient();
+  const navigate = useNavigate();
 
   function handleLikeUnlikePost(e: MouseEvent) {
     e.stopPropagation();
@@ -86,6 +87,11 @@ export default function UserPost({ post }: PostProps) {
     }
   }
 
+  async function handleEditPost(e: MouseEvent) {
+    e.stopPropagation();
+    navigate("/user/post/edit/" + post._id);
+  }
+
   return (
     <Stack my={3}>
       <Card
@@ -109,7 +115,7 @@ export default function UserPost({ post }: PostProps) {
           }}
           action={
             <Box sx={{ textAlign: "right", mb: 1 }}>
-              <IconButton color="info" LinkComponent={Link} to={"/user/post/edit/" + post._id}>
+              <IconButton color="info" onClick={handleEditPost}>
                 {username == post.user.username && <MdEdit size={14} />}
               </IconButton>
               <IconButton color="error" onClick={handleDeletePost}>

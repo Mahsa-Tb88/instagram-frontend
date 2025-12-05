@@ -29,7 +29,6 @@ export default function UserComment({
 
   const useEditComment = useEditCommentPost();
   const useDeleteComment = useDeleteCommentPost();
-  const client = useQueryClient();
 
   async function deleteComment(id: string) {
     const answer = await showConfirmDialog(
@@ -38,22 +37,20 @@ export default function UserComment({
       "No"
     );
 
-    // confirm("Are you sure you want to delete this comment")
     if (answer) {
       const data = { id, postId: post._id };
       const updatedList = listComment.filter((l) => l._id !== id);
       setListComment(updatedList);
+      console.log("start...");
       useDeleteComment.mutate(data, {
-        onSuccess() {
-          console.log("....succes delete msg");
-          toast.success("Message was deleted successfully!");
+        onSuccess(d) {
+          console.log("success", d);
         },
         onError(e) {
-          console.log(e);
-          setListComment((c) => c.slice(0, c.length - 1));
-          toast.error(e.message);
+          console.log("error.. ", e);
         },
       });
+      console.log("end..");
     }
   }
 
@@ -62,7 +59,7 @@ export default function UserComment({
     const data = { id: c._id, text: comment, postId: post._id };
     useEditComment.mutate(data, {
       onSuccess() {
-        // client.invalidateQueries({ queryKey: ["post", post._id] });
+        console.log("save success");
         setPreviousComment(comment);
       },
       onError(e) {

@@ -23,7 +23,6 @@ export default function UserPosts() {
   }, [inView]);
 
   const postExists: boolean = data?.pages?.[0]?.data?.body?.count === 0;
-  console.log("erorrrr", error);
 
   return (
     <Stack my={4}>

@@ -58,7 +58,6 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
     //   },
     // ]);
 
-    
     setTimeout(() => ref.current!.scrollIntoView({ behavior: "smooth" }), 50);
     commentMutation.mutate(
       { text, id: post._id },
@@ -112,16 +111,20 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
               Comments
             </Typography>
             <Stack sx={{ bgcolor: "light.main", p: 1, borderRadius: 1, mb: 3 }}>
-              {listComment.map((c) => (
-                <UserComment
-                  setListComment={setListComment}
-                  listComment={listComment}
-                  post={post}
-                  key={c._id}
-                  c={c}
-                  handleGotoProfile={handleGotoProfile}
-                />
-              ))}
+              {listComment.length > 0 ? (
+                listComment.map((c) => (
+                  <UserComment
+                    setListComment={setListComment}
+                    listComment={listComment}
+                    post={post}
+                    key={c._id}
+                    c={c}
+                    handleGotoProfile={handleGotoProfile}
+                  />
+                ))
+              ) : (
+                <Typography>No Comment yet!</Typography>
+              )}
               <div ref={ref} />
             </Stack>
             <Stack mt={"auto"} flexDirection={"row"} alignItems={"center"} gap={1}>
