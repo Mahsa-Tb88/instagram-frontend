@@ -4,12 +4,14 @@ import { MdAddCircle, MdHome, MdLogout, MdPerson, MdSearch } from "react-icons/m
 import { useUserStore } from "../../store/store";
 import { useLogout } from "../../http/mutation";
 import { showConfirmDialog } from "../../components/Dialogs/ConfirmDialog";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { showSearchDialog } from "../../components/Dialogs/SearchDialog";
 
 export default function BottomMenu() {
   const username = useUserStore((state) => state.username);
   const logout = useUserStore((state) => state.logout);
   const { mutate } = useLogout();
+  const navigate = useNavigate();
 
   async function handleLogout() {
     const answer = await showConfirmDialog(
@@ -27,14 +29,19 @@ export default function BottomMenu() {
       });
     }
   }
-
+  async function handleSearch() {
+    const user = await showSearchDialog();
+    if (user) {
+      setTimeout(() => navigte("/user/" + user), 50);
+    }
+  }
   return (
     <Paper sx={{ position: "fixed", bottom: "0", width: 1, zIndex: 5, px: 1 }}>
       <Stack direction={"row"} justifyContent={"space-between"}>
         <IconButton LinkComponent={Link} to="/">
           <MdHome />
         </IconButton>
-        <IconButton>
+        <IconButton onClick={handleSearch}>
           <MdSearch />
         </IconButton>
         <IconButton>

@@ -9,6 +9,7 @@ import Initializer from "./layouts/Initializer/Initializer";
 import ConfirmDialog from "./components/Dialogs/ConfirmDialog";
 import ViewPostDialog from "./components/Dialogs/ViewPostDialog/ViewPostDialog";
 import ViewListUserFollow from "./components/Dialogs/ViewListUserFollow/ViewListUserFollow";
+import SearchDialog from "./components/Dialogs/SearchDialog";
 
 function App() {
   const isInitialized = useAppStore((state) => state.initialized);
@@ -23,9 +24,10 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {isInitialized ? <Outlet /> : <Initializer />}
-      <ConfirmDialog />
       <ViewPostDialog />
       <ViewListUserFollow />
+      <SearchDialog />
+      <ConfirmDialog />
     </ThemeProvider>
   );
 }

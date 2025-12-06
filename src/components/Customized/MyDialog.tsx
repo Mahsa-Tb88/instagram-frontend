@@ -24,6 +24,8 @@ export default function MyDialog(props: DialogProps & { setOpen: (b: boolean) =>
         history.back();
       }
       openDialogCount--;
+    } else {
+      openDialogCount--;
     }
   }, [ps.open]);
 

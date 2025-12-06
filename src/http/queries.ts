@@ -85,10 +85,10 @@ export function useGetUserPosts(username: string, limit: number) {
   });
 }
 
-export function useFindUser(q: string) {
+export function useFindUser(page: number, limit: number, q: string) {
   return useQuery({
-    queryKey: ["findSearchUser", q],
-    queryFn: () => axios.get("/users/search/findUser/", { params: { q } }),
+    queryKey: ["findSearchUser", q, page, limit],
+    queryFn: () => axios.get("/users/search/findUser/", { params: { q, page, limit } }),
     enabled: !!q,
   });
 }

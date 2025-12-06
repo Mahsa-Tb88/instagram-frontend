@@ -2,13 +2,15 @@ import { Box, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/mate
 import { useUserStore } from "../../store/store";
 import { useLogout } from "../../http/mutation";
 import { MdAddCircle, MdHome, MdLogout, MdPerson, MdSearch } from "react-icons/md";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { showConfirmDialog } from "../../components/Dialogs/ConfirmDialog";
+import SearchDialog, { showSearchDialog } from "../../components/Dialogs/SearchDialog";
 
 export default function LeftMenu() {
   const username = useUserStore((state) => state.username);
   const logout = useUserStore((state) => state.logout);
   const { mutate } = useLogout();
+  const navigte = useNavigate();
 
   async function handleLogout() {
     const answer = await showConfirmDialog(
@@ -26,7 +28,12 @@ export default function LeftMenu() {
       });
     }
   }
-
+  async function handleSearch() {
+    const user = await showSearchDialog();
+    if (user) {
+      setTimeout(() => navigte("/user/" + user), 50);
+    }
+  }
   return (
     <Box
       minWidth={250}
@@ -44,7 +51,7 @@ export default function LeftMenu() {
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItemButton>
-        <ListItemButton LinkComponent={Link} to={"/user/search"}>
+        <ListItemButton onClick={handleSearch}>
           <ListItemIcon>
             <MdSearch />
           </ListItemIcon>
