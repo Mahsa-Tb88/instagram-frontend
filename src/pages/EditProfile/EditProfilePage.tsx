@@ -1,4 +1,3 @@
-import React from "react";
 import { useUserStore } from "../../store/store";
 import { useGetProfile } from "../../http/queries";
 import { Container, Divider, Grid, Typography } from "@mui/material";
@@ -11,6 +10,7 @@ export default function EditProfilePage() {
   const { data, isPending, error, refetch } = useGetProfile(username);
 
   const user = data?.data?.body;
+  console.log("ispending")
 
   return (
     <Container>
@@ -20,7 +20,7 @@ export default function EditProfilePage() {
         ) : error ? (
           <LoadingError message={error.message} handleAction={refetch} />
         ) : (
-          <Grid size={12}>
+          <Grid size={12} sx={{ my: 3 }}>
             <Typography variant="h4" component={"h1"} fontWeight={600}>
               Edit Profile
             </Typography>

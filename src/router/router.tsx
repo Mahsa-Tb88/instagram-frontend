@@ -6,7 +6,7 @@ import ActivationPage from "../pages/Auth/ActivationPage";
 import MainLayout from "../layouts/Main/MainLayout";
 import HomePage from "../pages/Home/HomePage";
 import ViewProfilePage from "../pages/ViewProfile/ViewProfilePage";
-import EditProfilePage from "../pages/EditProfile/EditProfilePageee";
+import EditProfilePage from "../pages/EditProfile/EditProfilePage";
 import EditPost from "../pages/Post/EditPost";
 import UserSearch from "../pages/UserSearch/UserSearch";
 
