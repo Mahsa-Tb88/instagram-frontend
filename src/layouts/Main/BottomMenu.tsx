@@ -32,7 +32,7 @@ export default function BottomMenu() {
   async function handleSearch() {
     const user = await showSearchDialog();
     if (user) {
-      setTimeout(() => navigte("/user/" + user), 50);
+      setTimeout(() => navigate("/user/" + user), 50);
     }
   }
   return (
