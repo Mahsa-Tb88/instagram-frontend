@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import { MdSend } from "react-icons/md";
 import { toast } from "react-toastify";
 import UserComment from "./UserComment";
+import { useQueryClient } from "@tanstack/react-query";
 
 type PostContentProps = {
   post: Post;
@@ -19,14 +20,9 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
   const [text, setText] = useState("");
   const [listComment, setListComment] = useState<Comment[]>(post.comments);
 
-  // const [newComments, setNewComments] = useState<Comment[]>([]);
-  // const [listComment, setListComment] = useState<Comment[]>([...post.comments, ...newComments]);
-
   const commentMutation = useInsertComment();
   const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-
-  // const allComments = [...post.comments, ...newComments];
 
   function handleGotoProfile(username: string) {
     hideDialog();
@@ -49,25 +45,25 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
       },
     ]);
 
-    // setNewComments([
-    //   ...newComments,
-    //   {
-    //     _id: Math.random().toString(),
-    //     text,
-    //     user: { _id: "", username, fullname: "", profilePicture },
-    //   },
-    // ]);
-
     setTimeout(() => ref.current!.scrollIntoView({ behavior: "smooth" }), 50);
     commentMutation.mutate(
       { text, id: post._id },
       {
-        onSuccess() {
+        onSuccess(d) {
           setText("");
+          setListComment([
+            ...listComment,
+            {
+              _id: d.data.body._id,
+              text,
+              user: { _id: "", username, fullname: "", profilePicture },
+            },
+          ]);
         },
         onError(e) {
           setListComment((c) => c.slice(0, c.length - 1));
           toast.error(e.message);
+          console.log("error insert comment", e);
         },
       }
     );

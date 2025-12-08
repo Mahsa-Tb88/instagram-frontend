@@ -2,7 +2,7 @@ import { Box, Grid, Skeleton, Stack } from "@mui/material";
 
 export default function SkeletonEditProfile() {
   return (
-    <Grid size={12}> 
+    <Grid size={12}>
       <Stack gap={3} sx={{ mt: 6 }}>
         <Skeleton variant="rectangular" width={"20%"} animation="wave" />
         <Skeleton variant="rectangular" width={"50%"} height={40} animation="wave" />

@@ -84,7 +84,7 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
     }
 
     editProfile.mutate(
-      { id: user!._id, email, bio, fullname, password, profilePicture: profilePic },
+      { id: user!._id, email: email!, bio, fullname, password, profilePicture: profilePic },
       {
         onSuccess() {
           setTimeout(() => {

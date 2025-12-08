@@ -19,7 +19,7 @@ import { showConfirmDialog } from "../../components/Dialogs/ConfirmDialog";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import { showViewPostDialog } from "../../components/Dialogs/ViewPostDialog/ViewPostDialog";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 type PostProps = { post: Post };
 export default function UserPost({ post }: PostProps) {
@@ -125,7 +125,12 @@ export default function UserPost({ post }: PostProps) {
           }
         />
 
-        <CardMedia src={SERVER_URL + post.image} component="img" alt="post image" />
+        <CardMedia
+          src={SERVER_URL + post.image}
+          component="img"
+          alt="post image"
+          sx={{ maxWidth: "100%", maxHeight: "100%" }}
+        />
         <Divider sx={{ mt: 1 }} />
         <CardContent>
           {post.caption.length > 40 ? (
