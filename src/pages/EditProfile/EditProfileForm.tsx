@@ -1,7 +1,7 @@
-import React, { useRef, useState, type ChangeEvent } from "react";
+import { type ChangeEvent } from "react";
 import type { User } from "../../types/types";
 import { Button } from "@mui/material";
-import axios from "axios";
+
 import { useUploadFile } from "../../http/mutation";
 
 interface EditProfileFormProps {

@@ -99,12 +99,6 @@ export function useEditProfile() {
   });
 }
 
-// export function useUploadFile() {
-//   return useMutation({
-//     mutationFn: (formData) => axios.post("/misc/upload", formData),
-//   });
-// }
-
 export function useUploadFile() {
   const abortControler = useRef<AbortController>(null);
   const [progress, setProgress] = useState(0);
@@ -114,13 +108,18 @@ export function useUploadFile() {
       abortControler.current = new AbortController();
       const form = new FormData();
       form.append("file", file);
-      return axios.post("/misc/upload", form, {
-        onUploadProgress(e) {
-          setProgress(+((e.progress ?? 0) * 100).toFixed());
-        },
-        timeout: 0,
-        signal: abortControler.current.signal,
-      });
+      return axios
+        .post("/misc/upload", form, {
+          onUploadProgress(e) {
+            setProgress(+((e.progress ?? 0) * 100).toFixed());
+          },
+          timeout: 0,
+          signal: abortControler.current.signal,
+        })
+        .finally(() => {
+          setProgress(0);
+          setTimeout(() => mutation.reset(), 50);
+        });
     },
   });
   function abort() {
