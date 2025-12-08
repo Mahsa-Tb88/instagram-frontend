@@ -20,25 +20,43 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
   const [confirm, setConfirm] = useState("");
   const [bio, setBio] = useState(user?.bio);
   const [email, setEmail] = useState(user?.email);
-  const [profilePicture, setProfilePicture] = useState(user?.profilePicture);
-  const [profilePicChanges, setProfilePicCahnges] = useState({});
+  const [profilePic, setProfilePic] = useState(user?.profilePicture);
+  const [profilePicChanges, setProfilePicCahnges] = useState(false);
   const [fullname, setFullName] = useState(user?.fullname);
   const [errors, setErrors] = useState<RegisterErrorObject>({});
 
   const { mutate, progress, abort, reset } = useUploadFile();
   const editProfile = useEditProfile();
 
-  function handleUpload(e: ChangeEvent<HTMLInputElement>) {
+  function removeProfilePicture() {
+    if (profilePic && !progress) {
+      setProfilePic("");
+      return;
+    } else {
+      abort();
+      reset();
+    }
+  }
+
+  function handleUpdateProfile(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setProfilePic(imageUrl);
+      setProfilePicCahnges(true);
+    }
     mutate(file!, {
       onSuccess(d) {
         console.log(d);
+        setProfilePic(d.data.body.url);
+        setProfilePicCahnges(false);
       },
       onError(e) {
         console.log(e);
       },
     });
   }
+
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     setErrors({});
@@ -65,25 +83,23 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
       return;
     }
 
-    function handleUpdateProfile(updatedPhoto: string) {
-      editProfile.mutate(
-        { id: user!._id, email, bio, fullname, password, profilePicture: updatedPhoto },
-        {
-          onSuccess() {
-            setTimeout(() => {
-              logoutMutation.mutate(undefined, {
-                onSuccess() {
-                  logout();
-                },
-              });
-            }, 1000);
-          },
-          onError(error) {
-            toast.error(error.message);
-          },
-        }
-      );
-    }
+    editProfile.mutate(
+      { id: user!._id, email, bio, fullname, password, profilePicture: profilePic },
+      {
+        onSuccess() {
+          setTimeout(() => {
+            logoutMutation.mutate(undefined, {
+              onSuccess() {
+                logout();
+              },
+            });
+          }, 1000);
+        },
+        onError(error) {
+          toast.error(error.message);
+        },
+      }
+    );
   }
   return (
     <Stack maxWidth={"60%"} gap={3} onSubmit={handleSubmit} component="form">
@@ -137,39 +153,41 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
           <Box
             component={"img"}
             src={
-              profilePicture
-                ? SERVER_URL + profilePicture // existing image from server
+              profilePicChanges
+                ? profilePic
+                : profilePic && !profilePicChanges
+                ? SERVER_URL + profilePic // existing image from server
                 : noImage
             }
             alt="profile image"
             sx={{ objectFit: "contain", width: "100%", height: "100%" }}
           />
           <IconButton
-            component={profilePicture ? "button" : "label"} // label connects to file input
-            htmlFor={profilePicture ? undefined : "upload-input"}
+            component={profilePic ? "button" : "label"} // label connects to file input
+            htmlFor={profilePic ? undefined : "upload-input"}
             sx={{
               position: "absolute",
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              bgcolor: profilePicture ? "rgba(255, 0, 0, 0.6)" : "rgba(39, 159, 67, 0.78)",
+              bgcolor: profilePic ? "rgba(255, 0, 0, 0.6)" : "rgba(39, 159, 67, 0.78)",
               color: "white",
               "&:hover": {
-                bgcolor: profilePicture ? "rgba(255, 0, 0, 0.8)" : "rgba(13, 197, 56, 0.6)",
+                bgcolor: profilePic ? "rgba(255, 0, 0, 0.8)" : "rgba(13, 197, 56, 0.6)",
               },
             }}
-            onClick={reset}
+            onClick={removeProfilePicture}
           >
-            {profilePicture ? <MdClose /> : <MdUpload />}
+            {profilePic ? <MdClose /> : <MdUpload />}
           </IconButton>
-          {!profilePicture && (
+          {!profilePic && (
             <TextField
               id="upload-input"
               type="file"
               sx={{
                 display: "none",
               }}
-              // onChange={uploadProfilePicHandler}
+              onChange={handleUpdateProfile}
             />
           )}
         </Stack>
@@ -181,4 +199,8 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
     </Stack>
   );
 }
-
+//  <div>
+//       <input type="file" onChange={handleUpload} />
+//       <h1>progress:{progress}</h1>
+//       <Button onClick={abort}>Cancel Upload</Button>
+//     </div>
