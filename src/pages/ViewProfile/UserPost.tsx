@@ -124,13 +124,21 @@ export default function UserPost({ post }: PostProps) {
             </Box>
           }
         />
-
-        <CardMedia
-          src={SERVER_URL + post.image}
-          component="img"
-          alt="post image"
-          sx={{ maxWidth: "100%", maxHeight: "100%" }}
-        />
+        <Box
+          sx={{
+            aspectRatio: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CardMedia
+            src={SERVER_URL + post.image}
+            component="img"
+            alt="post image"
+            sx={{ maxWidth: "100%", maxHeight: "100%" }}
+          />
+        </Box>
         <Divider sx={{ mt: 1 }} />
         <CardContent>
           {post.caption.length > 40 ? (
