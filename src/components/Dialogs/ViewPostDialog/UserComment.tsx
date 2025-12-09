@@ -3,36 +3,42 @@ import { useState, type ChangeEvent } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import type { Comment, Post } from "../../../types/types";
 import { useUserStore } from "../../../store/store";
-import { useDeleteCommentPost, useEditCommentPost } from "../../../http/mutation";
+import { useEditCommentPost } from "../../../http/mutation";
 import { toast } from "react-toastify";
-import { showConfirmDialog } from "../ConfirmDialog";
+
 import { useNavigate } from "react-router";
 
 type UserCommentProps = {
   c: Comment;
   post: Post;
   deleteComment: (id: string) => void;
-  saveHandler: (id: string) => void;
-  isEditComment: boolean;
-  setIsEditComment: () => void;
 };
-export default function UserComment({
-  c,
-  post,
-  deleteComment,
-  isEditComment,
-  setIsEditComment,
-}: UserCommentProps) {
+export default function UserComment({ c, post, deleteComment }: UserCommentProps) {
   const username = useUserStore((state) => state.username);
   const [comment, setComment] = useState(c.text);
+  const [isEditComment, setIsEditComment] = useState(false);
   const [previousComment, setPreviousComment] = useState(c.text);
   const navigate = useNavigate();
+  const useEditComment = useEditCommentPost();
 
   function handleGotoProfile(username: string) {
     // hideDialog();
     setTimeout(() => {
       navigate("/user/" + username);
     }, 50);
+  }
+  function saveHandler(id: string, comment: string) {
+    setIsEditComment(false);
+    const data = { id, text: comment, postId: post._id };
+    useEditComment.mutate(data, {
+      onSuccess() {
+        setPreviousComment(comment);
+      },
+      onError(e) {
+        toast.error(e.message);
+        setComment(previousComment);
+      },
+    });
   }
 
   return (
@@ -80,7 +86,7 @@ export default function UserComment({
             }
             fullWidth
           />
-          <Button size="small" sx={{ maxWidth: "20%" }} onClick={() => saveHandler(c._id,comment)}>
+          <Button size="small" sx={{ maxWidth: "20%" }} onClick={() => saveHandler(c._id, comment)}>
             Save
           </Button>
         </Stack>
