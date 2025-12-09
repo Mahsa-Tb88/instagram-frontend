@@ -6,66 +6,33 @@ import { useUserStore } from "../../../store/store";
 import { useDeleteCommentPost, useEditCommentPost } from "../../../http/mutation";
 import { toast } from "react-toastify";
 import { showConfirmDialog } from "../ConfirmDialog";
+import { useNavigate } from "react-router";
 
-type CommentProps = {
+type UserCommentProps = {
   c: Comment;
   post: Post;
-  setListComment: React.Dispatch<React.SetStateAction<Comment[]>>;
-  listComment: Comment[];
-  handleGotoProfile: (username: string) => void;
+  deleteComment: (id: string) => void;
+  saveHandler: (id: string) => void;
+  isEditComment: boolean;
+  setIsEditComment: () => void;
 };
 export default function UserComment({
   c,
   post,
-  handleGotoProfile,
-  setListComment,
-  listComment,
-}: CommentProps) {
+  deleteComment,
+  isEditComment,
+  setIsEditComment,
+}: UserCommentProps) {
   const username = useUserStore((state) => state.username);
-  const [isEditComment, setIsEditComment] = useState(false);
   const [comment, setComment] = useState(c.text);
   const [previousComment, setPreviousComment] = useState(c.text);
+  const navigate = useNavigate();
 
-  const useEditComment = useEditCommentPost();
-  const useDeleteComment = useDeleteCommentPost();
-  async function deleteComment(id: string) {
-    const answer = await showConfirmDialog(
-      <p style={{ fontSize: 24 }}>Are you sure you want to delete this comment</p>,
-      "Yes",
-      "No"
-    );
-
-    if (answer) {
-      const data = { id, postId: post._id };
-
-      const updatedList = listComment.filter((l) => l._id !== id);
-      setListComment(updatedList);
-      console.log("start...");
-      useDeleteComment.mutate(data, {
-        onSuccess(d) {
-          console.log("success", d);
-        },
-        onError(e) {
-          console.log("error.. ", e);
-        },
-      });
-      console.log("end..");
-    }
-  }
-
-  function saveHandler() {
-    setIsEditComment(false);
-    const data = { id: c._id, text: comment, postId: post._id };
-    useEditComment.mutate(data, {
-      onSuccess() {
-        console.log("save success");
-        setPreviousComment(comment);
-      },
-      onError(e) {
-        toast.error(e.message);
-        setComment(previousComment);
-      },
-    });
+  function handleGotoProfile(username: string) {
+    // hideDialog();
+    setTimeout(() => {
+      navigate("/user/" + username);
+    }, 50);
   }
 
   return (
@@ -113,7 +80,7 @@ export default function UserComment({
             }
             fullWidth
           />
-          <Button size="small" sx={{ maxWidth: "20%" }} onClick={saveHandler}>
+          <Button size="small" sx={{ maxWidth: "20%" }} onClick={() => saveHandler(c._id,comment)}>
             Save
           </Button>
         </Stack>

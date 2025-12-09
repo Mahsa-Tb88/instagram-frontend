@@ -7,7 +7,7 @@ import { useInView } from "react-intersection-observer";
 import LoadingError from "../../components/LoadingError";
 import { useEffect } from "react";
 import UserPost from "./UserPost";
-import { MdHome, MdRefresh } from "react-icons/md";
+import { MdHome } from "react-icons/md";
 
 export default function UserPosts() {
   const { username } = useParams<{ username: string }>();

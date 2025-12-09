@@ -6,8 +6,7 @@ import { useInsertComment } from "../../../http/mutation";
 import { useNavigate } from "react-router";
 import { MdSend } from "react-icons/md";
 import { toast } from "react-toastify";
-import UserComment from "./UserComment";
-import { useQueryClient } from "@tanstack/react-query";
+import CommentComp from "./CommentComp";
 
 type PostContentProps = {
   post: Post;
@@ -103,26 +102,7 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
             </Typography>
           </Stack>
           <Stack mt={4} sx={{ mr: 3 }}>
-            <Typography component={"h6"} variant="h6" fontWeight={600} mb={1}>
-              Comments
-            </Typography>
-            <Stack sx={{ bgcolor: "light.main", p: 1, borderRadius: 1, mb: 3 }}>
-              {listComment.length > 0 ? (
-                listComment.map((c) => (
-                  <UserComment
-                    setListComment={setListComment}
-                    listComment={listComment}
-                    post={post}
-                    key={c._id}
-                    c={c}
-                    handleGotoProfile={handleGotoProfile}
-                  />
-                ))
-              ) : (
-                <Typography>No Comment yet!</Typography>
-              )}
-              <div ref={ref} />
-            </Stack>
+            <CommentComp listComment={listComment} setListComment={setListComment} post={post} />
             <Stack mt={"auto"} flexDirection={"row"} alignItems={"center"} gap={1}>
               <TextField
                 variant="standard"
