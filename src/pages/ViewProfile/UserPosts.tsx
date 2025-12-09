@@ -28,12 +28,12 @@ export default function UserPosts() {
     <Stack my={4}>
       {isPending ? (
         <UserPostsSkeleton />
-      ) : error ? (
+      ) : error && error.status === 404 ? (
         <LoadingError
           message={error.message}
-          handleAction={error.status === 404 ? () => navigate("/") : refetch}
-          actionText={error.status === 404 ? "Back to home" : "Retry"}
-          actionIcon={error.status === 404 ? <MdHome /> : <MdRefresh />}
+          handleAction={() => navigate("/")}
+          actionText={"Back to home"}
+          actionIcon={<MdHome />}
         />
       ) : postExists ? (
         <Typography sx={{ textAlign: "center" }} fontWeight={600} fontSize={24} p={2}>

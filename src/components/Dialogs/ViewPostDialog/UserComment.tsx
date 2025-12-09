@@ -5,7 +5,6 @@ import type { Comment, Post } from "../../../types/types";
 import { useUserStore } from "../../../store/store";
 import { useDeleteCommentPost, useEditCommentPost } from "../../../http/mutation";
 import { toast } from "react-toastify";
-import { useQueryClient } from "@tanstack/react-query";
 import { showConfirmDialog } from "../ConfirmDialog";
 
 type CommentProps = {
@@ -30,30 +29,28 @@ export default function UserComment({
   const useEditComment = useEditCommentPost();
   const useDeleteComment = useDeleteCommentPost();
   async function deleteComment(id: string) {
-    // const answer = await showConfirmDialog(
-    //   <p style={{ fontSize: 24 }}>Are you sure you want to delete this comment</p>,
-    //   "Yes",
-    //   "No"
-    // );
+    const answer = await showConfirmDialog(
+      <p style={{ fontSize: 24 }}>Are you sure you want to delete this comment</p>,
+      "Yes",
+      "No"
+    );
 
-    // if (answer) {
-    const data = { id, postId: post._id };
-    console.log("comment is ", c);
-    console.log("commentId", id);
-    console.log("postId", post._id);
-    const updatedList = listComment.filter((l) => l._id !== id);
-    setListComment(updatedList);
-    console.log("start...");
-    useDeleteComment.mutate(data, {
-      onSuccess(d) {
-        console.log("success", d);
-      },
-      onError(e) {
-        console.log("error.. ", e);
-      },
-    });
-    console.log("end..");
-    // }
+    if (answer) {
+      const data = { id, postId: post._id };
+
+      const updatedList = listComment.filter((l) => l._id !== id);
+      setListComment(updatedList);
+      console.log("start...");
+      useDeleteComment.mutate(data, {
+        onSuccess(d) {
+          console.log("success", d);
+        },
+        onError(e) {
+          console.log("error.. ", e);
+        },
+      });
+      console.log("end..");
+    }
   }
 
   function saveHandler() {

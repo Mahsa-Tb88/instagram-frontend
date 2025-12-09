@@ -10,7 +10,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import type { Post } from "../../types/types";
 import { MdComment, MdDelete, MdEdit, MdFavorite } from "react-icons/md";
 import { useUserStore } from "../../store/store";
