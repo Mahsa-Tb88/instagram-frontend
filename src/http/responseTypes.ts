@@ -12,3 +12,4 @@ export type GetPostResponse = Response & { body: Post };
 export type GetProfileResponse = Response & { body: Profile };
 export type GetUserPostsResponse = Response & { body: { posts: Post[]; count: number } };
 export type getFFUser = Response & { body: { users: User[] | []; count: number } };
+export type UploadResponse = Response & { body: { url: string; file: string } };

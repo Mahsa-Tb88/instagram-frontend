@@ -8,10 +8,11 @@ import { Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import { useUserStore } from "../../store/store";
 import { MdClose, MdUpload } from "react-icons/md";
+import ProfileImageUploader from "./ProfileImageUploader";
 
-interface EditProfileFormProps {
+type EditProfileFormProps = {
   user: User & { email: string; bio: string };
-}
+};
 export default function EditProfileForm({ user }: EditProfileFormProps) {
   const logoutMutation = useLogout();
   const setUser = useUserStore((state) => state.setUser);
@@ -21,22 +22,14 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
   const [bio, setBio] = useState("");
   const [email, setEmail] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState(
+    user?.profilePicture ? SERVER_URL + user.profilePicture : noImage
+  );
   const [fullname, setFullName] = useState("");
   const [errors, setErrors] = useState<RegisterErrorObject>({});
 
   const uploadMutation = useUploadFile();
   const updateMutation = useEditProfile();
-
-  function removeProfilePicture() {
-    if (profilePic && !progress) {
-      setProfilePic("");
-      return;
-    } else {
-      abort();
-      reset();
-    }
-  }
 
   useEffect(() => {
     if (user) {
@@ -126,11 +119,20 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
           helperText={errors.confirm}
         />
       </Stack>
-      <Stack flexDirection={"row"} alignItems={"center"}>
-        {}
-      </Stack>
 
-      <Button type="submit" size="large" disableElevation disabled={editProfile.isPending}>
+      <ProfileImageUploader
+        imageUrl={imageUrl}
+        setImageUrl={setImageUrl}
+        setProfilePicture={setProfilePicture}
+        uploadMutation={uploadMutation}
+      />
+
+      <Button
+        type="submit"
+        size="large"
+        disableElevation
+        disabled={uploadMutation.isPending || updateMutation.isPending}
+      >
         Save Changes
       </Button>
     </Stack>
