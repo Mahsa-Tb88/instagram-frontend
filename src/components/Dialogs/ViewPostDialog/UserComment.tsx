@@ -12,8 +12,9 @@ type UserCommentProps = {
   c: Comment;
   post: Post;
   deleteComment: (id: string) => void;
+  hideDialog: () => void;
 };
-export default function UserComment({ c, post, deleteComment }: UserCommentProps) {
+export default function UserComment({ c, post, deleteComment, hideDialog }: UserCommentProps) {
   const username = useUserStore((state) => state.username);
   const [comment, setComment] = useState(c.text);
   const [isEditComment, setIsEditComment] = useState(false);
@@ -22,7 +23,7 @@ export default function UserComment({ c, post, deleteComment }: UserCommentProps
   const useEditComment = useEditCommentPost();
 
   function handleGotoProfile(username: string) {
-    // hideDialog();
+    hideDialog();
     setTimeout(() => {
       navigate("/user/" + username);
     }, 50);

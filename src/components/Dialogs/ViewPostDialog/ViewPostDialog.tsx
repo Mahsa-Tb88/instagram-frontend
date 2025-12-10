@@ -7,7 +7,7 @@ import LoadingError from "../../LoadingError";
 import PostContent from "./PostContent";
 import { DialogContent } from "@mui/material";
 import ViewPostSkeleton from "./ViewPostSkeleton";
-import { useAppStore, useUserStore } from "../../../store/store";
+import { useAppStore } from "../../../store/store";
 import type { Post } from "../../../types/types";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -16,7 +16,6 @@ let showViewPostDialog: (s: string) => void;
 export { showViewPostDialog };
 
 export default function ViewPostDialog() {
-  const username = useUserStore((state) => state.username);
   const [open, setOpen] = useState(false);
   const [postId, setPostId] = useState("");
   const { data, error, isFetching, refetch } = useGetPost(postId);

@@ -10,8 +10,8 @@ export default function EditProfilePage() {
   const { data, isPending, error, refetch } = useGetProfile(username);
 
   const user = data?.data?.body;
-  console.log("ispending")
 
+  console.log("user", user);
   return (
     <Container>
       <Grid container>

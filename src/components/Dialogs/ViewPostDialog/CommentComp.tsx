@@ -8,12 +8,17 @@ type CommentProps = {
   post: Post;
   setListComment: React.Dispatch<React.SetStateAction<Comment[]>>;
   listComment: Comment[];
+  hideDialog: () => void;
 };
-export default function CommentComp({ post, setListComment, listComment }: CommentProps) {
+export default function CommentComp({
+  post,
+  setListComment,
+  listComment,
+  hideDialog,
+}: CommentProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   const useDeleteComment = useDeleteCommentPost();
-  console.log("listComeent", listComment);
 
   async function deleteComment(id: string) {
     const answer = await showConfirmDialog(
@@ -48,7 +53,13 @@ export default function CommentComp({ post, setListComment, listComment }: Comme
       <Stack sx={{ bgcolor: "light.main", p: 1, borderRadius: 1, mb: 3 }}>
         {listComment.length > 0 ? (
           listComment.map((c) => (
-            <UserComment post={post} key={c._id} c={c} deleteComment={deleteComment} />
+            <UserComment
+              post={post}
+              key={c._id}
+              c={c}
+              deleteComment={deleteComment}
+              hideDialog={hideDialog}
+            />
           ))
         ) : (
           <Typography>No Comment yet!</Typography>

@@ -102,7 +102,12 @@ export default function PostContent({ post, hideDialog }: PostContentProps) {
             </Typography>
           </Stack>
           <Stack mt={4} sx={{ mr: 3 }}>
-            <CommentComp listComment={listComment} setListComment={setListComment} post={post} />
+            <CommentComp
+              listComment={listComment}
+              setListComment={setListComment}
+              post={post}
+              hideDialog={hideDialog}
+            />
             <Stack mt={"auto"} flexDirection={"row"} alignItems={"center"} gap={1}>
               <TextField
                 variant="standard"

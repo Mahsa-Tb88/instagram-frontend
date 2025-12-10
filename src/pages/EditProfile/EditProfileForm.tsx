@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import type { RegisterErrorObject, User } from "../../types/types";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import noImage from "../../assets/images/no-image.jpg";
@@ -10,23 +10,23 @@ import { useUserStore } from "../../store/store";
 import { MdClose, MdUpload } from "react-icons/md";
 
 interface EditProfileFormProps {
-  user?: User;
+  user: User & { email: string; bio: string };
 }
 export default function EditProfileForm({ user }: EditProfileFormProps) {
   const logoutMutation = useLogout();
-  const logout = useUserStore((state) => state.logout);
+  const setUser = useUserStore((state) => state.setUser);
 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [bio, setBio] = useState(user?.bio);
-  const [email, setEmail] = useState(user?.email);
-  const [profilePic, setProfilePic] = useState(user?.profilePicture);
-  const [profilePicChanges, setProfilePicCahnges] = useState(false);
-  const [fullname, setFullName] = useState(user?.fullname);
+  const [bio, setBio] = useState("");
+  const [email, setEmail] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [fullname, setFullName] = useState("");
   const [errors, setErrors] = useState<RegisterErrorObject>({});
 
-  const { mutate, progress, abort, reset } = useUploadFile();
-  const editProfile = useEditProfile();
+  const uploadMutation = useUploadFile();
+  const updateMutation = useEditProfile();
 
   function removeProfilePicture() {
     if (profilePic && !progress) {
@@ -38,24 +38,14 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
     }
   }
 
-  function handleUpdateProfile(e: ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfilePic(imageUrl);
-      setProfilePicCahnges(true);
+  useEffect(() => {
+    if (user) {
+      setFullName(user.fullname);
+      setEmail(user.email);
+      setBio(user.bio);
+      setProfilePicture(user?.profilePicture ? SERVER_URL + user.profilePicture : noImage);
     }
-    mutate(file!, {
-      onSuccess(d) {
-        console.log(d);
-        setProfilePic(d.data.body.url);
-        setProfilePicCahnges(false);
-      },
-      onError(e) {
-        console.log(e);
-      },
-    });
-  }
+  }, [user]);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -83,14 +73,15 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
       return;
     }
 
-    editProfile.mutate(
-      { id: user!._id, email: email!, bio, fullname, password, profilePicture: profilePic },
+    updateMutation.mutate(
+      { id: user!._id, email, bio, fullname, password, profilePicture },
       {
         onSuccess() {
           setTimeout(() => {
             logoutMutation.mutate(undefined, {
               onSuccess() {
-                logout();
+                setUser({ fullname, profilePicture } as User);
+                toast.success("Profile Updated Succesfully");
               },
             });
           }, 1000);
@@ -136,7 +127,23 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
         />
       </Stack>
       <Stack flexDirection={"row"} alignItems={"center"}>
-        <Typography sx={{ mr: 3 }}>Profile Picture</Typography>
+        {}
+      </Stack>
+
+      <Button type="submit" size="large" disableElevation disabled={editProfile.isPending}>
+        Save Changes
+      </Button>
+    </Stack>
+  );
+}
+//  <div>
+//       <input type="file" onChange={handleUpload} />
+//       <h1>progress:{progress}</h1>
+//       <Button onClick={abort}>Cancel Upload</Button>
+//     </div>
+
+{
+  /* <Typography sx={{ mr: 3 }}>Profile Picture</Typography>
         <Stack
           sx={{
             width: "120px",
@@ -190,17 +197,5 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
               onChange={handleUpdateProfile}
             />
           )}
-        </Stack>
-      </Stack>
-
-      <Button type="submit" size="large" disableElevation disabled={editProfile.isPending}>
-        Save Changes
-      </Button>
-    </Stack>
-  );
+        </Stack> */
 }
-//  <div>
-//       <input type="file" onChange={handleUpload} />
-//       <h1>progress:{progress}</h1>
-//       <Button onClick={abort}>Cancel Upload</Button>
-//     </div>
