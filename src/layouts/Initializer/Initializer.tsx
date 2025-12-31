@@ -1,16 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import { useInitialize } from "../../http/queries";
-import { useAppStore, useUserStore } from "../../store/store";
+import { useAppStore, useMessagingStore, useUserStore } from "../../store/store";
 import { LinearProgress, Stack } from "@mui/material";
 import LoadingError from "../../components/LoadingError";
 import logo from "../../assets/images/logo.png";
+import { io } from "socket.io-client";
 
 export default function Initializer() {
   const { isPending, data, error, refetch } = useInitialize();
   const setInitialized = useAppStore((state) => state.setInitialized);
   const setUser = useUserStore((state) => state.setUser);
   const setSuggested = useUserStore((state) => state.setSuggestedUsers);
+  const setSocket = useMessagingStore((state) => state.setSocket);
 
   useEffect(() => {
     if (data) {
@@ -19,6 +21,8 @@ export default function Initializer() {
       if (body.user?.username) {
         setUser(body.user);
         setSuggested(body.suggested);
+        const socket = io(SERVER_URL, { withCredentials: true });
+        setSocket(socket);
       }
     }
   }, [data]);

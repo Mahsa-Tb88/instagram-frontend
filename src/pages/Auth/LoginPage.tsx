@@ -11,12 +11,13 @@ import {
   Typography,
 } from "@mui/material";
 
-import { useUserStore } from "../../store/store";
+import { useMessagingStore, useUserStore } from "../../store/store";
 import type { LoginErrorObject } from "../../types/types";
 
 import instagram from "../../assets/images/instagram.png";
 import { useMustLoggedOut } from "../../utils/customhooks";
 import { useLogin } from "../../http/mutation";
+import { io } from "socket.io-client";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -26,6 +27,7 @@ export default function LoginPage() {
   const { isPending, error, mutate } = useLogin();
   const setUser = useUserStore((state) => state.setUser);
   const setSuggestedUsers = useUserStore((state) => state.setSuggestedUsers);
+  const setSocket = useMessagingStore((state) => state.setSocket);
   useMustLoggedOut();
 
   function handleSubmit(event: FormEvent) {
@@ -49,6 +51,8 @@ export default function LoginPage() {
         onSuccess(d) {
           setUser(d.data.body.user);
           setSuggestedUsers(d.data.body.suggested);
+          const socket = io(SERVER_URL, { withCredentials: true });
+          setSocket(socket);
         },
       }
     );
