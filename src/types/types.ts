@@ -68,3 +68,16 @@ export type Profile = {
   bio: string;
   postCounts: number;
 };
+
+export type Conversation = {
+  _id: string;
+  from: { _id: string; username: string; fullname: string; profilePicture: string };
+  to: { _id: string; username: string; fullname: string; profilePicture: string };
+  isOnline?: boolean;
+  isTyping?: boolean;
+  unreadMessage: number;
+  lastMessage: {
+    sender: string;
+    text: string;
+  };
+};

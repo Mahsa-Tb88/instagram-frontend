@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import type { User } from "../types/types";
+import type { Conversation, Conversations, conversations, User } from "../types/types";
+import { Socket } from "socket.io-client";
 
 type AppStore = {
   initialized: boolean;
@@ -56,6 +57,31 @@ export const useUserStore = create<UserStore>((set) => {
         isLoggedIn: false,
         suggestedUsers: [],
       });
+    },
+  };
+});
+
+type MessagingStore = {
+  socket: Socket | null;
+  conversations: Conversation[];
+  isReady: boolean;
+  setSocket(socket: Socket | null): void;
+  setConversations(conversations: Conversation[]): void;
+  setIsReady(isReady: boolean): void;
+};
+export const useMessagingStore = create<MessagingStore>((set) => {
+  return {
+    socket: null,
+    conversations: [],
+    isReady: false,
+    setSocket(socket) {
+      set({ socket });
+    },
+    setConversations(conversations) {
+      set({ conversations });
+    },
+    setIsReady(isReady) {
+      set({ isReady });
     },
   };
 });
