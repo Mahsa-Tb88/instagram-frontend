@@ -49,6 +49,14 @@ export const useUserStore = create<UserStore>((set) => {
       set({ suggestedUsers });
     },
     logout() {
+      const state = useMessagingStore.getState();
+      if (state.socket) {
+        state.socket.removeAllListeners();
+        state.socket.disconnect();
+        state.setSocket(null);
+        state.setIsReady(false);
+      }
+
       set({
         _id: "",
         username: "",
